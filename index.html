@@ -335,20 +335,27 @@ const TOPICS = [
     k: 'decorators, generators and how Python handles scope and memory',
     p: 'write a CLI tool with classes, file I/O and error handling',
     tasks: [
-      'Chapter 1–3: Modules, Comments, pip, Variables, Datatypes & Strings',
-      'Chapter 1–3: Solve all Practice Sets',
-      'Chapter 4–5: Lists, Tuples, Dictionaries & Sets',
-      'Chapter 4–5: Solve all Practice Sets',
-      'Chapter 6–7: Conditionals, Loops & Control Flow',
-      'Chapter 6–7: Solve all Practice Sets',
-      'Chapter 8: Functions & Recursions + Practice Set',
+      'Chapter 1: Modules, Comments & pip + Practice Set',
+      'Chapter 2: Variables and Datatype + Practice Set',
+      'Chapter 3: Strings & String Slicing + Practice Set',
+      'Chapter 4: Lists and Tuples + Practice Set',
+      'Chapter 5: Dictionary & Sets + Practice Set',
+      'Practice: Solve mixed List, Tuple, Dict & Set problems',
+      'Chapter 6: Conditional Expression + Practice Set',
+      'Chapter 7: Loops in Python (for, while, break, continue)',
+      'Chapter 7: Practice Set & pattern printing problems',
+      'Chapter 8: Functions & Recursions',
+      'Chapter 8: Functions & Recursions Practice Set',
       'Project 1: Snake, Water, Gun Game',
-      'Chapter 9–10: File I/O & OOP Basics (Classes, Objects, __init__)',
-      'Chapter 9–10: Solve all Practice Sets',
-      'Chapter 11: Inheritance, @classmethod & Property Decorators + Practice Set',
+      'Chapter 9: File I/O (read, write, append, with) + Practice Set',
+      'Chapter 10: Object Oriented Programming (Classes, self, __init__)',
+      'Chapter 10: OOP Practice Set',
+      'Chapter 11: Inheritance & more on OOPs (super, @classmethod, @property)',
+      'Chapter 11: Inheritance Practice Set',
       'Project 2: The Perfect Guess',
-      'Chapter 12–13: Advanced Python 1 & 2 (Type hints, Try/Except/Finally, Lambdas) + Practice Sets',
-      'Mega Projects: Jarvis / Auto Reply AI Chatbot'
+      'Chapter 12: Advanced Python 1 (Walrus, type hints, try-except-finally) + Practice Set',
+      'Chapter 13: Advanced Python 2 (Virtualenv, lambda, map/filter/reduce) + Practice Set',
+      'Mega Projects: Jarvis (Voice Assistant) OR Auto Reply AI Chatbot'
     ] },
   { id: 'js', name: 'JavaScript', cat: 'backend', days: 5, rel: 'High',
     k: 'closures, `this`, prototypes and the event loop',
@@ -501,6 +508,18 @@ const REVISION_INTERVALS = [1, 3, 7, 14, 30];
 function seedProjects() {
   const ms = arr => arr.map(n => ({ name: n, done: false }));
   return [
+    { id: 'py-p1', name: 'Snake, Water, Gun Game', goal: 'Build an interactive CLI game implementing Python logic, random module and conditional branching.',
+      stack: ['python'], extra: ['random'],
+      milestones: ms(['Game rules logic', 'User & computer input', 'Score keeping', 'Win/Loss conditions', 'Replay loop']),
+      repo: '', demo: '', readme: false, deployed: false, target: '2026-10-06' },
+    { id: 'py-p2', name: 'The Perfect Guess', goal: 'A number guessing game using loops, random numbers and file I/O to store and compare the high score.',
+      stack: ['python'], extra: ['File I/O'],
+      milestones: ms(['Random number logic', 'Guess comparison loop', 'Attempt counter', 'High-score file read/write', 'Terminal UI polish']),
+      repo: '', demo: '', readme: false, deployed: false, target: '2026-10-08' },
+    { id: 'py-p3', name: 'Jarvis / Auto Reply AI Chatbot', goal: 'An automated assistant or chatbot built with modern Python, external APIs, and practical automation.',
+      stack: ['python'], extra: ['pyttsx3', 'speech_recognition', 'Gemini / OpenAI API'],
+      milestones: ms(['Project setup & virtualenv', 'Core command parser', 'Audio / Text input-output', 'API / Automation integration', 'Error handling', 'Documentation']),
+      repo: '', demo: '', readme: false, deployed: false, target: '2026-10-09' },
     { id: 'p1', name: 'Backend Task Management API', goal: 'Build a production-style backend with authentication, background jobs and a CI/CD pipeline.',
       stack: ['ts', 'node', 'express', 'postgres', 'redis', 'cicd'], extra: ['Authentication', 'BullMQ'],
       milestones: ms(['Planning', 'Architecture', 'Database', 'API', 'Authentication', 'Testing', 'Redis', 'Background jobs', 'CI/CD', 'Deployment', 'Documentation']),
@@ -564,6 +583,12 @@ const Repo = {
     const loaded = StorageAdapter.load();
     const base = defaultState();
     this.state = loaded ? Object.assign(base, loaded, { settings: Object.assign(base.settings, loaded.settings || {}) }) : base;
+    if (this.state && Array.isArray(this.state.projects)) {
+      const existingIds = new Set(this.state.projects.map(p => p.id));
+      for (const sp of seedProjects()) {
+        if (!existingIds.has(sp.id)) this.state.projects.unshift(sp);
+      }
+    }
   },
   commit() { const ok = StorageAdapter.save(this.state); if (!ok) toast('Could not save to browser storage. Export your data from Settings to keep a copy.', 'warn'); },
   reset() { StorageAdapter.clear(); this.state = defaultState(); this.commit(); },
