@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#131922">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Capable">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Capable: Learning Roadmap Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef1f5; --surface: #ffffff; --raised: #f5f7fa; --line: #d9dfe7; --line-soft: #e7ebf0;
+  --text: #17202b; --muted: #5b6776; --faint: #8a95a3;
+  --green: #1f9d63; --yellow: #b7860f; --red: #cf4a3f; --blue: #2f7fd6; --purple: #7a5ae0; --teal: #178f8a;
+  --green-bg: #e3f5ec; --yellow-bg: #fbf1d8; --red-bg: #fbe6e3; --blue-bg: #e3eefb; --purple-bg: #eee8fc; --teal-bg: #dff3f1; --muted-bg: #edf0f3;
+  --ink: #17202b; --focus: #2f7fd6;
+  --radius-lg: 14px; --radius: 9px; --radius-sm: 6px;
+  --font: 'Onest', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131922; --surface: #1a212c; --raised: #212a37; --line: #2c3645; --line-soft: #252e3b;
+    --text: #e4e9f0; --muted: #98a3b3; --faint: #6d7988;
+    --green: #4cc38a; --yellow: #e3b64c; --red: #ea6c62; --blue: #65a9f2; --purple: #a891f3; --teal: #45bdb5;
+    --green-bg: #173427; --yellow-bg: #362e17; --red-bg: #3a1f1d; --blue-bg: #172b42; --purple-bg: #2a2342; --teal-bg: #133331; --muted-bg: #252e3b;
+    --ink: #e4e9f0; --focus: #65a9f2;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131922; --surface: #1a212c; --raised: #212a37; --line: #2c3645; --line-soft: #252e3b;
+  --text: #e4e9f0; --muted: #98a3b3; --faint: #6d7988;
+  --green: #4cc38a; --yellow: #e3b64c; --red: #ea6c62; --blue: #65a9f2; --purple: #a891f3; --teal: #45bdb5;
+  --green-bg: #173427; --yellow-bg: #362e17; --red-bg: #3a1f1d; --blue-bg: #172b42; --purple-bg: #2a2342; --teal-bg: #133331; --muted-bg: #252e3b;
+  --ink: #e4e9f0; --focus: #65a9f2;
+}
+:root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.5; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--blue); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* ---------- shell ---------- */
+.app { display: grid; grid-template-columns: 236px 1fr; min-height: 100%; }
+.side { position: sticky; top: 0; height: 100vh; border-right: 1px solid var(--line); padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; background: var(--surface); overflow-y: auto; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 0 8px 18px; }
+.brand-mark { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--ink); color: var(--surface); font-weight: 700; font-size: 15px; }
+.brand-name { font-weight: 650; font-size: 16px; letter-spacing: -0.01em; }
+.brand-sub { font-size: 12px; color: var(--muted); }
+.nav a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; }
+.nav a:hover { background: var(--raised); color: var(--text); }
+.nav a.on { background: var(--raised); color: var(--text); box-shadow: inset 2px 0 0 var(--text); }
+.nav svg { width: 17px; height: 17px; flex: none; }
+.nav-group { font-size: 12px; color: var(--faint); padding: 14px 10px 4px; }
+.side-foot { margin-top: auto; padding: 12px 8px 0; font-size: 12px; color: var(--faint); border-top: 1px solid var(--line-soft); }
+.main { min-width: 0; padding: 26px 32px 60px; max-width: 1360px; }
+.topbar { display: none; }
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.page-head h1 { margin: 0; font-size: 26px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.2; }
+.page-head p { margin: 4px 0 0; color: var(--muted); max-width: 70ch; }
+.head-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ---------- layout ---------- */
+.grid { display: grid; gap: 16px; }
+.g-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.g-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.g-main { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+.span-2 { grid-column: span 2; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+.mt { margin-top: 16px; } .mt-s { margin-top: 8px; } .mb { margin-bottom: 16px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 18px 20px; min-width: 0; }
+.card.flat { background: var(--raised); border-color: var(--line-soft); border-radius: var(--radius); }
+.card h2 { margin: 0 0 12px; font-size: 15px; font-weight: 600; letter-spacing: -0.005em; }
+.card h2 .sub { font-weight: 400; color: var(--muted); font-size: 13px; margin-left: 6px; }
+.card h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; }
+.muted { color: var(--muted); } .faint { color: var(--faint); } .small { font-size: 13px; } .tiny { font-size: 12px; }
+.big { font-size: 34px; font-weight: 650; letter-spacing: -0.03em; line-height: 1.05; }
+.mid { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+.divider { height: 1px; background: var(--line-soft); margin: 14px 0; }
+.empty { padding: 22px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: var(--radius); }
+
+/* ---------- hero (dashboard) ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 16px; }
+.today-topic { font-size: 30px; font-weight: 650; letter-spacing: -0.025em; line-height: 1.1; margin: 6px 0 2px; }
+.today-meta { color: var(--muted); font-size: 14px; }
+.type-band { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 99px; }
+.exam-card { background: var(--red-bg); border-color: color-mix(in srgb, var(--red) 35%, transparent); }
+.exam-title { font-size: 28px; font-weight: 700; letter-spacing: 0.01em; color: var(--red); }
+
+/* pipeline — signature element */
+.pipe { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 6px; }
+.pipe-stage { position: relative; background: var(--raised); padding: 12px 12px 10px; min-width: 0; }
+.pipe-stage:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.pipe-stage:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.pipe-stage .nm { font-size: 12px; color: var(--muted); }
+.pipe-stage .vl { font-size: 22px; font-weight: 650; letter-spacing: -0.02em; }
+.pipe-fill { position: absolute; left: 0; bottom: 0; height: 3px; border-radius: 2px; }
+.versus { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.vs-num { font-size: 40px; font-weight: 650; letter-spacing: -0.03em; line-height: 1; }
+.vs-lab { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+/* ---------- atoms ---------- */
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; white-space: nowrap; line-height: 1.5; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+.t-green { color: var(--green); } .t-yellow { color: var(--yellow); } .t-red { color: var(--red); } .t-blue { color: var(--blue); } .t-purple { color: var(--purple); } .t-teal { color: var(--teal); } .t-muted { color: var(--muted); }
+.bg-green { background: var(--green-bg); color: var(--green); } .bg-yellow { background: var(--yellow-bg); color: var(--yellow); } .bg-red { background: var(--red-bg); color: var(--red); }
+.bg-blue { background: var(--blue-bg); color: var(--blue); } .bg-purple { background: var(--purple-bg); color: var(--purple); } .bg-teal { background: var(--teal-bg); color: var(--teal); } .bg-muted { background: var(--muted-bg); color: var(--muted); }
+.fill-green { background: var(--green); } .fill-yellow { background: var(--yellow); } .fill-red { background: var(--red); } .fill-blue { background: var(--blue); } .fill-purple { background: var(--purple); } .fill-teal { background: var(--teal); } .fill-muted { background: var(--faint); }
+
+.bar { height: 8px; background: var(--raised); border-radius: 99px; overflow: hidden; position: relative; }
+.bar.thin { height: 5px; }
+.bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; transition: width .5s cubic-bezier(.2,.7,.2,1); }
+.bar > i.ghost { opacity: .35; }
+.bar-row { display: grid; grid-template-columns: 150px 1fr 48px; align-items: center; gap: 12px; font-size: 13px; padding: 5px 0; }
+.bar-row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-row .v { text-align: right; color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid var(--line); background: var(--surface); padding: 7px 13px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; color: var(--text); white-space: nowrap; }
+.btn:hover { background: var(--raised); }
+.btn.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.btn.primary:hover { opacity: .9; }
+.btn.danger { color: var(--red); }
+.btn.sm { padding: 4px 10px; font-size: 13px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.link-btn { background: none; border: 0; padding: 0; color: var(--blue); cursor: pointer; font-size: 13px; }
+
+.checks { list-style: none; margin: 0; padding: 0; }
+.checks li { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line-soft); font-size: 14px; }
+.checks li:last-child { border-bottom: 0; }
+.checks li.done span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--faint); }
+.cb { appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--faint); border-radius: 5px; flex: none; margin-top: 2px; cursor: pointer; display: grid; place-items: center; background: var(--surface); }
+.cb:checked { background: var(--green); border-color: var(--green); }
+.cb:checked::after { content: ''; width: 5px; height: 9px; border: solid var(--surface); border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px); }
+
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+.kv > div { background: var(--raised); border-radius: var(--radius); padding: 10px 12px; }
+.kv .k { font-size: 12px; color: var(--muted); }
+.kv .v { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+
+.score-parts { display: grid; gap: 9px; }
+.sp { display: grid; grid-template-columns: 110px 1fr 54px; gap: 10px; align-items: center; font-size: 13px; }
+.sp .v { text-align: right; font-weight: 600; }
+.sp-why { grid-column: 1 / -1; font-size: 12px; color: var(--muted); margin-top: -4px; }
+.flag { font-size: 13px; padding: 9px 12px; border-radius: var(--radius); background: var(--yellow-bg); color: var(--text); border-left: 3px solid var(--yellow); }
+.flag.blue { background: var(--blue-bg); border-left-color: var(--blue); }
+.flag.green { background: var(--green-bg); border-left-color: var(--green); }
+.flag.red { background: var(--red-bg); border-left-color: var(--red); }
+
+.advisor ol { margin: 8px 0 0; padding-left: 20px; }
+.advisor li { padding: 3px 0; }
+.advisor .rec { margin-top: 12px; padding: 12px 14px; background: var(--raised); border-radius: var(--radius); font-size: 14px; }
+
+/* ---------- forms ---------- */
+label.f { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 500; color: var(--muted); }
+label.f.inline { flex-direction: row; align-items: center; gap: 10px; color: var(--text); font-size: 14px; font-weight: 400; cursor: pointer; }
+.in, select.in, textarea.in { width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 14px; color: var(--text); }
+textarea.in { min-height: 72px; resize: vertical; line-height: 1.45; }
+.in:focus { outline: none; border-color: var(--focus); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 20%, transparent); }
+.hours { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.hours .in { text-align: center; font-size: 17px; font-weight: 600; padding: 8px 4px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); flex-wrap: wrap; }
+.seg button { border: 0; background: none; padding: 7px 13px; font-size: 13px; cursor: pointer; color: var(--muted); border-right: 1px solid var(--line); }
+.seg button:last-child { border-right: 0; }
+.seg button.on { background: var(--ink); color: var(--surface); }
+.range-wrap { display: flex; align-items: center; gap: 12px; }
+.range-wrap input[type=range] { flex: 1; accent-color: var(--text); }
+.range-wrap output { font-weight: 650; font-size: 18px; width: 34px; text-align: right; }
+.highlight-field { border: 1px solid var(--line); border-left: 3px solid var(--green); border-radius: var(--radius); padding: 12px 14px; background: var(--raised); }
+.sticky { position: sticky; top: 16px; }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; }
+table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.t th { text-align: left; font-weight: 500; color: var(--muted); font-size: 12.5px; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.t td { padding: 10px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; white-space: nowrap; }
+table.t tr.click { cursor: pointer; }
+table.t tr.click:hover td { background: var(--raised); }
+table.t tr.sel td { background: var(--raised); }
+.mini-bar { display: inline-block; width: 56px; height: 5px; background: var(--raised); border-radius: 9px; vertical-align: middle; margin-right: 8px; position: relative; overflow: hidden; }
+.mini-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 9px; }
+.cat-stripe { display: inline-block; width: 3px; height: 16px; border-radius: 2px; vertical-align: middle; margin-right: 10px; }
+
+/* ---------- roadmap timeline ---------- */
+.phase { margin-bottom: 26px; }
+.phase-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.phase-head h2 { margin: 0; font-size: 18px; font-weight: 650; }
+.tl { position: relative; padding-left: 22px; }
+.tl::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--line); border-radius: 2px; }
+.tl-item { position: relative; display: grid; grid-template-columns: 140px minmax(0, 1fr) 190px 110px; gap: 14px; align-items: center; padding: 10px 14px; border-radius: var(--radius); margin-bottom: 4px; cursor: default; }
+.tl-item.click { cursor: pointer; }
+.tl-item.click:hover { background: var(--surface); }
+.tl-item::before { content: ''; position: absolute; left: -20px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--surface); border: 2px solid var(--faint); }
+.tl-item.now { background: var(--surface); border: 1px solid var(--line); }
+.tl-item.now::before { border-color: var(--text); background: var(--text); }
+.tl-item.exam { background: var(--red-bg); }
+.tl-item.exam::before { border-color: var(--red); }
+.tl-item .date { font-size: 13px; color: var(--muted); }
+.tl-item .nm { font-weight: 550; overflow: hidden; text-overflow: ellipsis; }
+.dual { display: grid; gap: 4px; }
+.dual .lbl { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); }
+
+/* ---------- calendar ---------- */
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal-h { font-size: 12px; color: var(--muted); padding: 0 6px 4px; }
+.cal-d { min-height: 96px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 7px 8px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; position: relative; text-align: left; overflow: hidden; }
+.cal-d:hover { border-color: var(--faint); }
+.cal-d.out { opacity: .35; }
+.cal-d.is-today { border-color: var(--text); box-shadow: inset 0 0 0 1px var(--text); }
+.cal-d .n { font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.cal-d .lab { font-size: 11.5px; line-height: 1.3; color: var(--muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.cal-d .stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; }
+.cal-d.exam { background: var(--red-bg); border-color: transparent; }
+.cal-d.rest { background: var(--raised); }
+.cal-icons { display: flex; gap: 4px; margin-top: auto; flex-wrap: wrap; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ---------- projects ---------- */
+.proj-ms { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 2px 14px; }
+.proj-ms label { display: flex; align-items: center; gap: 9px; font-size: 14px; padding: 5px 0; cursor: pointer; }
+.proj-ms label.done { color: var(--muted); }
+.evidence { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.ev { background: var(--raised); border-radius: var(--radius); padding: 10px 12px; font-size: 13px; }
+.ev.ok { background: var(--green-bg); }
+
+/* ---------- charts ---------- */
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--muted); font-size: 11px; font-family: var(--font); }
+.chart .grid-line { stroke: var(--line-soft); stroke-width: 1; }
+.chart-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* ---------- modal + toast ---------- */
+.modal-bg { position: fixed; inset: 0; background: rgba(8, 12, 18, .55); display: grid; place-items: center; z-index: 50; padding: 20px; animation: fade .15s ease; }
+.modal { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); width: min(640px, 100%); max-height: calc(100vh - 40px); overflow-y: auto; padding: 22px 24px; animation: rise .2s cubic-bezier(.2,.7,.2,1); }
+.modal.wide { width: min(820px, 100%); }
+.modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.modal-head h2 { margin: 0; font-size: 19px; font-weight: 650; }
+.x { border: 0; background: var(--raised); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 18px; line-height: 1; color: var(--muted); flex: none; }
+.q-block { padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+.q-block:last-of-type { border-bottom: 0; }
+.q-kind { font-size: 12px; color: var(--muted); }
+.q-text { margin: 2px 0 8px; font-weight: 500; }
+.toasts { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); right: 18px; display: flex; flex-direction: column; gap: 8px; z-index: 60; }
+.toast { background: var(--ink); color: var(--surface); padding: 10px 14px; border-radius: var(--radius); font-size: 14px; max-width: 360px; animation: rise .2s ease; }
+.toast.warn { background: var(--yellow); color: #1b1405; }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+.view-enter { animation: fade .18s ease; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1180px) {
+  .g-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tl-item { grid-template-columns: 120px minmax(0, 1fr) 150px; }
+  .tl-item .st { display: none; }
+}
+@media (max-width: 960px) {
+  .app { grid-template-columns: 1fr; }
+  .side { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; z-index: 40; transform: translateX(-100%); transition: transform .2s ease; padding-top: calc(22px + env(safe-area-inset-top, 0px)); }
+  .side.open { transform: none; }
+  .scrim { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 39; }
+  .topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); padding: 10px 16px; border-bottom: 1px solid var(--line); }
+  .menu-btn { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm); width: 36px; height: 36px; cursor: pointer; display: grid; place-items: center; }
+  .main { padding: 18px 16px 50px; }
+  .hero, .g-main, .g-3, .g-2 { grid-template-columns: minmax(0, 1fr); }
+  .span-2 { grid-column: auto; }
+  .hours { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sticky { position: static; }
+  .evidence { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .g-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipe { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .pipe-stage { padding: 10px 6px; }
+  .pipe-stage .vl { font-size: 17px; }
+  .pipe-stage .nm { font-size: 10.5px; }
+  .today-topic { font-size: 24px; }
+  .cal { gap: 3px; }
+  .cal-d { min-height: 58px; padding: 5px; }
+  .cal-d .lab { display: none; }
+  .tl-item { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .bar-row { grid-template-columns: 100px 1fr 40px; }
+  .page-head h1 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand"><div class="brand-mark">C</div><div><div class="brand-name">Capable</div><div class="brand-sub">Learn, understand, build</div></div></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot" id="sideFoot"></div>
+  </aside>
+  <div>
+    <div class="topbar"><button class="menu-btn" data-action="menu" aria-label="Open menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><strong id="topTitle"></strong></div>
+    <main class="main" id="main"></main>
+  </div>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script>
+/* =========================================================
+   1. ROADMAP DATA
+   ========================================================= */
+const ROADMAP_START = '2026-09-26';
+const EXAM_PERIODS = [
+  { start: '2026-10-28', end: '2026-11-02', name: 'Exam period 1' },
+  { start: '2026-12-09', end: '2027-01-15', name: 'Exam period 2' },
+];
+const PHASES = [
+  { id: 1, name: 'Phase 1', start: '2026-09-26', end: '2026-11-02', desc: 'Backend foundations' },
+  { id: 2, name: 'Phase 2', start: '2026-11-03', end: '2027-01-15', desc: 'Data, infrastructure and Generative AI' },
+  { id: 3, name: 'Phase 3', start: '2027-01-16', end: '2027-05-31', desc: 'Agentic AI, automation, ML and projects' },
+];
+
+/* cat: backend | genai | advanced.  rel = job relevance.
+   k = concept probe, p = practical probe, tasks = learning units spread across planned days */
+const TOPICS = [
+  { id: 'python', name: 'Python', cat: 'backend', days: 7, rel: 'High',
+    k: 'decorators, generators and how Python handles scope and memory',
+    p: 'write a CLI tool with classes, file I/O and error handling',
+    tasks: ['Syntax, types and control flow', 'Functions, scope and closures', 'Lists, dicts, sets and comprehensions', 'OOP: classes, inheritance, dunder methods', 'Modules, packages and virtual environments', 'Exceptions and file I/O', 'Iterators, generators and decorators', 'Type hints and dataclasses', 'async/await basics', 'pytest basics', 'Solve 5 practice problems', 'Build a CLI tool without a tutorial'] },
+  { id: 'js', name: 'JavaScript', cat: 'backend', days: 5, rel: 'High',
+    k: 'closures, `this`, prototypes and the event loop',
+    p: 'write a small data-processing script using async/await and modules',
+    tasks: ['Variables, types and coercion', 'Functions, closures and this', 'Array and object methods', 'Prototypes and classes', 'Promises and async/await', 'Event loop basics', 'Modules (ESM vs CommonJS)', 'Error handling', 'Practice problems', 'Build a small script without a tutorial'] },
+  { id: 'node', name: 'Node.js', cat: 'backend', days: 5, rel: 'High',
+    k: 'the Node.js event loop and non-blocking I/O',
+    p: 'build a small HTTP API with the core http module',
+    tasks: ['Node runtime and the event loop', 'Modules and npm', 'fs, path and streams', 'Async patterns: callbacks to promises', 'EventEmitter', 'Raw HTTP server', 'Environment variables and config', 'Error handling in async code', 'Build a small API', 'Write notes on event loop phases'] },
+  { id: 'ts', name: 'TypeScript', cat: 'backend', days: 5, rel: 'High',
+    k: 'generics, narrowing and structural typing',
+    p: 'convert a JavaScript module to strict TypeScript',
+    tasks: ['Types, interfaces and aliases', 'Unions, narrowing and literal types', 'Generics', 'Utility types', 'Classes and access modifiers', 'tsconfig and strict mode', 'Typing Node code', 'Runtime validation with Zod', 'Convert a JS project to TS'] },
+  { id: 'express', name: 'Express.js', cat: 'backend', days: 4, rel: 'High',
+    k: 'the middleware chain and how errors flow through Express',
+    p: 'create a REST API with Express without following a tutorial',
+    tasks: ['Routing and route params', 'Middleware chain', 'Request validation', 'Error-handling middleware', 'REST design and status codes', 'JWT authentication basics', 'Controllers and services structure', 'Build a CRUD API without a tutorial'] },
+  { id: 'postgres', name: 'PostgreSQL', cat: 'backend', days: 4, rel: 'High',
+    k: 'PostgreSQL indexing and how to read a query plan',
+    p: 'design a normalized schema and query it from Node',
+    tasks: ['Tables, types and constraints', 'SELECT, JOINs and aggregates', 'Normalization and relations', 'Indexes and EXPLAIN', 'Transactions and isolation', 'Connect from Node', 'Migrations', 'Model the Task API schema'] },
+  { id: 'supabase', name: 'Supabase', cat: 'backend', days: 3, rel: 'Medium',
+    k: 'Row Level Security and how Supabase Auth ties into Postgres',
+    p: 'build a feature using Supabase auth and a protected table',
+    tasks: ['Project setup and Postgres in Supabase', 'Auth and Row Level Security', 'Storage and Realtime', 'Edge functions', 'Connect a Node app', 'Build a small feature end-to-end'] },
+  { id: 'mongodb', name: 'MongoDB', cat: 'backend', days: 2, rel: 'Medium',
+    k: 'when to embed vs reference documents',
+    p: 'model and query a collection with Mongoose',
+    tasks: ['Documents, collections and CRUD', 'Schema design: embed vs reference', 'Aggregation pipeline', 'Mongoose with Node'] },
+  { id: 'redis', name: 'Redis + BullMQ', cat: 'backend', days: 4, rel: 'High',
+    k: 'what Redis solves and when you would use it',
+    p: 'add a cache and a background job queue to an API',
+    tasks: ['Redis data types', 'Caching patterns and TTL', 'Rate limiting with Redis', 'Pub/Sub basics', 'BullMQ queues and workers', 'Retries, backoff and failed jobs', 'Repeatable jobs', 'Add a background job to your API'] },
+  { id: 'cicd', name: 'CI/CD', cat: 'backend', days: 1, rel: 'High',
+    k: 'what a CI pipeline guarantees and what CD adds',
+    p: 'set up a GitHub Actions pipeline that lints and tests',
+    tasks: ['CI concepts and pipelines', 'GitHub Actions: lint and test', 'Build and deploy step', 'Add CI to your project'] },
+  { id: 'genai', name: 'Generative AI', cat: 'genai', days: 7, rel: 'High',
+    k: 'tokens, context windows, sampling and embeddings',
+    p: 'build an LLM-powered API endpoint with structured output',
+    tasks: ['How LLMs work: tokens, context, sampling', 'Transformers and attention (intuition)', 'Embeddings and similarity', 'LLM APIs: chat and streaming', 'Structured outputs and JSON', 'Function / tool calling', 'Evaluation basics', 'Cost, latency and model choice', 'Fine-tuning vs prompting vs RAG', 'Build an LLM-powered endpoint', 'Build a small GenAI app without a tutorial'] },
+  { id: 'prompt', name: 'Prompt Engineering', cat: 'genai', days: 1, rel: 'Medium',
+    k: 'how instructions, context and examples shape model output',
+    p: 'iterate a prompt against a small test set and measure the change',
+    tasks: ['Instructions, context and examples', 'Few-shot and step-by-step reasoning', 'System prompts and output formats', 'Iterate prompts against test cases'] },
+  { id: 'agentf', name: 'AI Agent Foundations', cat: 'genai', days: 1, rel: 'High',
+    k: 'what makes something an agent: the loop, tools and memory',
+    p: 'write a minimal tool-calling agent loop without a framework',
+    tasks: ['Agent anatomy: loop, tools, memory', 'Tool-calling loop from scratch', 'Planning and stopping conditions', 'Build a minimal agent without a framework'] },
+  { id: 'rag', name: 'RAG', cat: 'genai', days: 1, rel: 'High',
+    k: 'chunking, retrieval and why RAG reduces hallucination',
+    p: 'build a small retrieval pipeline over your own documents',
+    tasks: ['Chunking and embeddings', 'Vector stores and retrieval', 'Reranking and context assembly', 'Build a small RAG pipeline'] },
+  { id: 'langchain', name: 'LangChain', cat: 'genai', days: 1, rel: 'Medium',
+    k: 'runnables / LCEL and how LangChain composes steps',
+    p: 'rebuild your RAG pipeline with LangChain',
+    tasks: ['Models, prompts and runnables (LCEL)', 'Retrievers and document loaders', 'Tools and agents in LangChain', 'Rebuild your RAG with LangChain'] },
+  { id: 'langgraph', name: 'LangGraph', cat: 'genai', days: 1, rel: 'High',
+    k: 'state, nodes, edges and checkpointing in LangGraph',
+    p: 'build a graph agent with a conditional branch',
+    tasks: ['State, nodes and edges', 'Conditional routing and cycles', 'Checkpointing and human-in-the-loop', 'Build a small graph agent'] },
+  { id: 'advframe', name: 'Advanced Agent Frameworks & Harness Engineering', short: 'Agent Frameworks & Harness', cat: 'genai', days: 1, rel: 'Medium',
+    k: 'what an agent harness controls: tools, context, permissions, tracing',
+    p: 'solve one task with two frameworks and compare them',
+    tasks: ['Survey agent SDKs and frameworks', 'Harness design: tools, context, permissions', 'Tracing and observability', 'Compare two frameworks on one task'] },
+  { id: 'multimodal', name: 'Multimodal Agents', cat: 'genai', days: 1, rel: 'Medium',
+    k: 'how images, documents and audio enter an agent’s context',
+    p: 'build an agent tool that reads an image or PDF',
+    tasks: ['Vision inputs and document understanding', 'Audio and speech in agents', 'Build a multimodal tool call'] },
+  { id: 'loop', name: 'Loop Engineering', cat: 'genai', days: 1, rel: 'Medium',
+    k: 'loop termination, self-correction and reliability',
+    p: 'harden an agent loop with retries, limits and evals',
+    tasks: ['Loop design and termination', 'Self-correction and reflection loops', 'Evals for loop reliability', 'Harden an agent loop'] },
+  { id: 'security', name: 'AI Security & Guardrails', short: 'AI Security', cat: 'genai', days: 1, rel: 'High',
+    k: 'prompt injection and how guardrails limit damage',
+    p: 'add input/output guardrails and tool permissions to an agent',
+    tasks: ['Prompt injection and data exfiltration', 'Input and output guardrails', 'Tool permissions and sandboxing', 'Add guardrails to an agent'] },
+  { id: 'mcp', name: 'Model Context Protocol (MCP)', short: 'MCP', cat: 'genai', days: 1, rel: 'High',
+    k: 'MCP hosts, clients and servers, and tools vs resources',
+    p: 'build a small MCP server and connect it to a client',
+    tasks: ['MCP architecture: hosts, clients, servers', 'Tools, resources and prompts', 'Build a small MCP server', 'Connect it to a client'] },
+  { id: 'agent', name: 'AI Agent', cat: 'advanced', days: 7, rel: 'High',
+    k: 'agent architectures, memory and evaluation',
+    p: 'build and deploy a research or automation agent as an API',
+    tasks: ['Agent architectures (ReAct, plan-and-execute)', 'Memory: short-term and long-term', 'Tool design and error handling', 'Multi-step planning', 'Evals for agents', 'Cost and latency control', 'Deploy an agent as an API', 'Build a research agent', 'Build an automation agent', 'Write-up: what worked and what failed'] },
+  { id: 'agentic', name: 'Agentic AI', cat: 'advanced', days: 7, rel: 'High',
+    k: 'multi-agent orchestration, handoffs and failure recovery',
+    p: 'build a multi-agent system and evaluate it on test tasks',
+    tasks: ['Multi-agent patterns', 'Orchestration and delegation', 'Shared state and handoffs', 'Human-in-the-loop design', 'Long-running workflows', 'Observability and tracing', 'Reliability and failure recovery', 'Build a multi-agent system', 'Evaluate it against test tasks', 'Document architecture decisions'] },
+  { id: 'n8n', name: 'n8n', cat: 'advanced', days: 5, rel: 'Medium',
+    k: 'triggers, nodes, credentials and error workflows in n8n',
+    p: 'build an n8n automation that calls your own backend',
+    tasks: ['n8n basics: nodes, triggers, credentials', 'HTTP and webhook workflows', 'AI nodes and agents in n8n', 'Error handling and retries', 'Self-hosting n8n', 'Connect n8n to your backend', 'Build 2 real automations'] },
+  { id: 'aiml', name: 'AI/ML', cat: 'advanced', days: 14, rel: 'High',
+    k: 'overfitting, evaluation metrics and how a training loop works',
+    p: 'train, evaluate and serve a model end-to-end',
+    tasks: ['NumPy and pandas', 'Data cleaning and visualization', 'Linear and logistic regression', 'Train/test split and overfitting', 'Metrics: precision, recall, F1', 'Decision trees and ensembles', 'scikit-learn pipelines', 'Feature engineering', 'Clustering and PCA', 'Neural network basics', 'PyTorch fundamentals', 'Training loop from scratch', 'Intro to fine-tuning', 'Model serving via API', 'Kaggle-style problem without a tutorial', 'End-to-end ML mini project'] },
+];
+const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
+const tName = id => (TOPIC[id] ? (TOPIC[id].short || TOPIC[id].name) : id);
+const isAI = id => TOPIC[id] && TOPIC[id].cat !== 'backend';
+
+const PROJECT_DAY_TASKS = ['Pick one feature and scope it', 'Implement it end-to-end', 'Write at least one test', 'Update the README', 'Push to GitHub'];
+const REST_TASKS = ['Sleep, walk, stay offline for a while', 'Optional: 15 minutes skimming notes, nothing more'];
+const EXAM_TASKS = ['University study only', 'Log university hours in check-in', 'No roadmap learning expected'];
+
+/* [start, end, type, topicId, label] */
+const SEGMENTS = [
+  ['2026-09-26', '2026-10-02', 'learn', 'python'],
+  ['2026-10-03', '2026-10-07', 'learn', 'js'],
+  ['2026-10-08', '2026-10-12', 'learn', 'node'],
+  ['2026-10-13', '2026-10-17', 'learn', 'ts'],
+  ['2026-10-18', '2026-10-18', 'rest'],
+  ['2026-10-19', '2026-10-22', 'learn', 'express'],
+  ['2026-10-23', '2026-10-26', 'learn', 'postgres'],
+  ['2026-10-27', '2026-10-27', 'project', null, 'Project day'],
+  ['2026-10-28', '2026-11-02', 'exam', null, 'University exams'],
+  ['2026-11-03', '2026-11-05', 'learn', 'supabase'],
+  ['2026-11-06', '2026-11-06', 'rest'],
+  ['2026-11-07', '2026-11-08', 'learn', 'mongodb'],
+  ['2026-11-09', '2026-11-12', 'learn', 'redis'],
+  ['2026-11-13', '2026-11-13', 'learn', 'cicd'],
+  ['2026-11-14', '2026-11-14', 'project', null, 'Mini project'],
+  ['2026-11-15', '2026-11-21', 'learn', 'genai'],
+  ['2026-11-22', '2026-11-22', 'learn', 'prompt'],
+  ['2026-11-23', '2026-11-23', 'learn', 'agentf'],
+  ['2026-11-24', '2026-11-24', 'learn', 'rag'],
+  ['2026-11-25', '2026-11-25', 'learn', 'langchain'],
+  ['2026-11-26', '2026-11-26', 'learn', 'langgraph'],
+  ['2026-11-27', '2026-11-27', 'learn', 'advframe'],
+  ['2026-11-28', '2026-11-28', 'rest'],
+  ['2026-11-29', '2026-11-29', 'learn', 'multimodal'],
+  ['2026-11-30', '2026-11-30', 'learn', 'loop'],
+  ['2026-12-01', '2026-12-01', 'learn', 'security'],
+  ['2026-12-02', '2026-12-02', 'learn', 'mcp'],
+  ['2026-12-03', '2026-12-08', 'learn', 'agent'],
+  ['2026-12-09', '2027-01-15', 'exam', null, 'University exams'],
+  ['2027-01-16', '2027-01-16', 'learn', 'agent', 'AI Agent practical / final day'],
+  ['2027-01-17', '2027-01-23', 'learn', 'agentic'],
+  ['2027-01-24', '2027-01-24', 'rest'],
+  ['2027-01-25', '2027-01-29', 'learn', 'n8n'],
+  ['2027-01-30', '2027-02-12', 'learn', 'aiml'],
+  ['2027-02-13', '2027-02-13', 'project', null, 'Final project start'],
+  ['2027-02-14', '2027-05-31', 'project', null, 'Projects, implementation and revision'],
+];
+const LAST_LEARNING_DAY = '2027-02-12';
+
+const REVISION_INTERVALS = [1, 3, 7, 14, 30];
+
+function seedProjects() {
+  const ms = arr => arr.map(n => ({ name: n, done: false }));
+  return [
+    { id: 'p1', name: 'Backend Task Management API', goal: 'Build a production-style backend with authentication, background jobs and a CI/CD pipeline.',
+      stack: ['ts', 'node', 'express', 'postgres', 'redis', 'cicd'], extra: ['Authentication', 'BullMQ'],
+      milestones: ms(['Planning', 'Architecture', 'Database', 'API', 'Authentication', 'Testing', 'Redis', 'Background jobs', 'CI/CD', 'Deployment', 'Documentation']),
+      repo: '', demo: '', readme: false, deployed: false, target: '2026-11-14' },
+    { id: 'p2', name: 'RAG Knowledge Assistant', goal: 'Answer questions over your own notes with retrieval, citations and basic evaluation.',
+      stack: ['genai', 'prompt', 'rag', 'langchain', 'postgres', 'express'], extra: ['pgvector'],
+      milestones: ms(['Planning', 'Ingestion and chunking', 'Embeddings and vector store', 'Retrieval API', 'Answer generation', 'Evaluation', 'Guardrails', 'Deployment', 'Documentation']),
+      repo: '', demo: '', readme: false, deployed: false, target: '2026-12-08' },
+    { id: 'p3', name: 'Agentic Workflow System', goal: 'A multi-agent system with an MCP server, guardrails, evals and an n8n trigger.',
+      stack: ['agentf', 'langgraph', 'mcp', 'security', 'loop', 'agent', 'agentic', 'n8n'], extra: [],
+      milestones: ms(['Planning', 'Architecture', 'MCP server and tools', 'Agent loop', 'Multi-agent orchestration', 'Guardrails', 'Evals', 'n8n integration', 'Deployment', 'Documentation']),
+      repo: '', demo: '', readme: false, deployed: false, target: '2027-01-29' },
+    { id: 'p4', name: 'Final Capstone Project', goal: 'An end-to-end product combining a backend, an ML component and agentic features.',
+      stack: ['aiml', 'agentic', 'express', 'postgres', 'redis', 'cicd'], extra: [],
+      milestones: ms(['Scope and planning', 'Architecture', 'Data / ML pipeline', 'Backend API', 'AI features', 'Testing', 'CI/CD', 'Deployment', 'Documentation', 'Demo video']),
+      repo: '', demo: '', readme: false, deployed: false, target: '2027-03-15' },
+  ];
+}
+
+/* =========================================================
+   2. STORAGE LAYER
+   Everything reads/writes through Repo. To move to Supabase,
+   replace StorageAdapter.load/save with calls to a `user_state`
+   table (or split `logs`, `checks`, `revisions`, `projects`
+   into their own tables keyed by user_id + date / id).
+   ========================================================= */
+const StorageAdapter = {
+  key: 'learning-roadmap-tracker:v1',
+  memory: null,
+  load() {
+    try { const raw = localStorage.getItem(this.key); if (raw) return JSON.parse(raw); } catch (e) { /* fall through */ }
+    return this.memory;
+  },
+  save(state) {
+    this.memory = state;
+    try { localStorage.setItem(this.key, JSON.stringify(state)); return true; } catch (e) { return false; }
+  },
+  clear() { this.memory = null; try { localStorage.removeItem(this.key); } catch (e) {} },
+};
+
+function defaultState() {
+  return {
+    version: 1,
+    settings: { theme: 'dark', codingTarget: 2, dateOverride: '' },
+    logs: {},          // date -> check-in
+    taskChecks: {},    // date -> {taskText: true}
+    customTasks: {},   // date -> [text]
+    overrides: {},     // date -> {type:'learn', topicId}  (rest day converted)
+    checks: {},        // topicId -> [{date, concept, practical, recall, build, decision}]
+    topicState: {},    // topicId -> {courseDone, completedOn, essentials}
+    revisions: [],     // {id, topicId, interval, due, done, doneOn, result, score, moved}
+    projects: seedProjects(),
+    weekly: {},        // weekStart -> answers
+    monthly: {},       // yyyy-mm -> notes
+  };
+}
+
+const Repo = {
+  state: null,
+  init() {
+    const loaded = StorageAdapter.load();
+    const base = defaultState();
+    this.state = loaded ? Object.assign(base, loaded, { settings: Object.assign(base.settings, loaded.settings || {}) }) : base;
+  },
+  commit() { const ok = StorageAdapter.save(this.state); if (!ok) toast('Could not save to browser storage. Export your data from Settings to keep a copy.', 'warn'); },
+  reset() { StorageAdapter.clear(); this.state = defaultState(); this.commit(); },
+};
+/* =========================================================
+   3. DATE UTILITIES (local dates as YYYY-MM-DD strings)
+   ========================================================= */
+const pad = n => String(n).padStart(2, '0');
+const toISO = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const fromISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = fromISO(s); d.setDate(d.getDate() + n); return toISO(d); };
+const diffDays = (a, b) => Math.round((fromISO(b) - fromISO(a)) / 86400000);
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const fmt = (s, opts = {}) => { const d = fromISO(s); return `${opts.wd ? WD[d.getDay()] + ', ' : ''}${MONTHS[d.getMonth()].slice(0, opts.long ? 20 : 3)} ${d.getDate()}${opts.year ? ', ' + d.getFullYear() : ''}`; };
+const weekStart = s => { const d = fromISO(s); const wd = (d.getDay() + 6) % 7; d.setDate(d.getDate() - wd); return toISO(d); };
+const today = () => (S().settings.dateOverride || toISO(new Date()));
+const S = () => Repo.state;
+const num = v => (isFinite(parseFloat(v)) ? parseFloat(v) : 0);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const avg = arr => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);
+const r1 = v => Math.round(v * 10) / 10;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* =========================================================
+   4. SCHEDULE
+   ========================================================= */
+const BASE_DAYS = {};
+(function buildSchedule() {
+  const counter = {};
+  for (const [start, end, type, topicId, label] of SEGMENTS) {
+    for (let d = start; d <= end; d = addDays(d, 1)) {
+      const info = { date: d, type, topicId: topicId || null, label: label || null };
+      if (type === 'learn') { counter[topicId] = (counter[topicId] || 0) + 1; info.dayIdx = counter[topicId]; info.dayCount = TOPIC[topicId].days; }
+      BASE_DAYS[d] = info;
+    }
+  }
+})();
+const isExam = d => EXAM_PERIODS.some(p => d >= p.start && d <= p.end);
+const examFor = d => EXAM_PERIODS.find(p => d >= p.start && d <= p.end);
+
+function dayInfo(d) {
+  const base = BASE_DAYS[d];
+  if (!base) return { date: d, type: d < ROADMAP_START ? 'pre' : 'project', topicId: null, label: d < ROADMAP_START ? 'Before roadmap' : 'Projects, implementation and revision' };
+  if (base.type === 'exam') return base; // exam days can never be overridden
+  const ov = S().overrides[d];
+  if (ov && base.type === 'rest') return { date: d, type: 'learn', topicId: ov.topicId, label: 'Catch-up day (was rest)', converted: true, dayIdx: null, dayCount: TOPIC[ov.topicId].days };
+  return base;
+}
+const phaseFor = d => PHASES.find(p => d >= p.start && d <= p.end) || (d < ROADMAP_START ? null : PHASES[2]);
+const TYPE_LABEL = { learn: 'Learning', rest: 'Rest', project: 'Project', exam: 'University exams', pre: 'Before start' };
+
+function plannedTasks(d) {
+  const info = dayInfo(d);
+  let list = [];
+  if (info.type === 'learn') {
+    const t = TOPIC[info.topicId];
+    const ts = S().topicState[t.id] || {};
+    let tasks = t.tasks;
+    if (ts.essentials) tasks = tasks.slice(0, Math.ceil(tasks.length * 0.7));
+    if (info.converted) list = [`Catch up on unfinished ${tName(t.id)} tasks`, 'Code for at least 90 minutes'];
+    else {
+      const per = Math.ceil(tasks.length / t.days);
+      list = tasks.slice((info.dayIdx - 1) * per, info.dayIdx * per);
+      if (!list.length) list = ['Review every concept of this topic', 'Build something small from memory'];
+    }
+    list = list.concat(['Write notes in your own words', 'Code without a tutorial']);
+  } else if (info.type === 'project') list = PROJECT_DAY_TASKS.slice();
+  else if (info.type === 'rest') list = REST_TASKS.slice();
+  else if (info.type === 'exam') list = EXAM_TASKS.slice();
+  return list.concat(S().customTasks[d] || []);
+}
+
+/* =========================================================
+   5. DAILY LEARNING QUALITY SCORE (out of 100)
+   ========================================================= */
+function scoreLog(log) {
+  if (!log) return null;
+  const tgt = num(S().settings.codingTarget) || 2;
+  const learned = (log.learned || '').trim().length;
+  const built = (log.built || '').trim().length;
+  const reasons = {};
+
+  let u = (num(log.understanding) / 10) * 25;
+  reasons.understanding = `Self-rated understanding ${num(log.understanding) || 0}/10`;
+  if (learned < 20) { u *= 0.7; reasons.understanding += '; “What I learned” is too short to back it up (−30%)'; }
+
+  let c = Math.min(num(log.coding) / tgt, 1) * 30;
+  reasons.coding = `${num(log.coding)}h of your ${tgt}h coding target`;
+  if (num(log.coding) > 0 && !log.selfCoded) { c *= 0.5; reasons.coding += '; code not marked as written by you (−50%)'; }
+
+  let p = (log.noTutorial ? 12 : 0) + (built >= 15 ? 8 : built > 0 ? 4 : 0);
+  reasons.practice = `${log.noTutorial ? 'Worked without a tutorial' : 'No tutorial-free work'}; ${built >= 15 ? 'described what you built' : built > 0 ? 'build description is thin' : 'nothing built logged'}`;
+
+  const revDone = S().revisions.some(r => r.doneOn === log.date);
+  let r = revDone ? 10 : Math.min(num(log.revision) / 0.5, 1) * 7 + (log.reviewed ? 3 : 0);
+  reasons.revision = revDone ? 'Completed a spaced-revision checkpoint' : `${num(log.revision)}h revision${log.reviewed ? '; reviewed earlier material' : ''}`;
+
+  let a = Math.min(num(log.project) / 1, 1) * 10 + (log.applied ? 5 : 0);
+  reasons.application = `${num(log.project)}h project work${log.applied ? '; applied it to something practical' : ''}`;
+
+  const parts = { understanding: Math.round(u), coding: Math.round(c), practice: Math.round(p), revision: Math.round(r), application: Math.round(a) };
+  const total = Object.values(parts).reduce((x, y) => x + y, 0);
+  const flags = [];
+  if (num(log.study) >= 2 && num(log.coding) < 0.5) flags.push('Mostly passive study today. Watching hours alone do not raise this score.');
+  if (built === 0 && num(log.study) + num(log.coding) > 0) flags.push('Nothing built was logged. Even 20 lines written from memory count.');
+  return { total, parts, reasons, flags };
+}
+const SCORE_MAX = { understanding: 25, coding: 30, practice: 20, revision: 10, application: 15 };
+const SCORE_LABEL = { understanding: 'Understanding', coding: 'Coding', practice: 'Practice', revision: 'Revision', application: 'Application' };
+
+const workHours = l => (l ? num(l.study) + num(l.coding) + num(l.project) + num(l.revision) : 0);
+const loadHours = l => workHours(l) + (l ? num(l.university) : 0);
+const credit = l => (l && l.topicId && TOPIC[l.topicId] ? ({ yes: 1, partial: 0.5 }[l.targetDone] || 0) : 0);
+
+/* =========================================================
+   6. DAY STATUS, STREAKS, REST, BURNOUT
+   ========================================================= */
+function dayStatus(d) {
+  const t = today();
+  const info = dayInfo(d);
+  const log = S().logs[d];
+  if (info.type === 'pre') return 'pre';
+  if (d > t) return 'future';
+  if (info.type === 'exam') return log && num(log.university) > 0 ? 'exam-logged' : 'exam';
+  if (info.type === 'rest') return log && workHours(log) >= 3 ? 'completed' : 'rest';
+  if (!log) return d < t ? 'missed' : 'pending';
+  const sc = scoreLog(log).total;
+  if (workHours(log) < 1 && num(log.rest) >= 3) return 'rest-taken';
+  if (sc >= 40 || log.targetDone === 'yes') return 'completed';
+  return 'partial';
+}
+// exam days pause the streak (neither add nor break); rest adds.
+const STREAK_ADD = new Set(['completed', 'rest', 'rest-taken']);
+const STREAK_PAUSE = new Set(['exam', 'exam-logged', 'pending']);
+
+function streaks() {
+  const t = today();
+  let cur = 0, longest = 0, run = 0;
+  for (let d = ROADMAP_START; d <= t; d = addDays(d, 1)) {
+    const st = dayStatus(d);
+    if (STREAK_ADD.has(st)) { run++; longest = Math.max(longest, run); }
+    else if (!STREAK_PAUSE.has(st)) run = 0;
+  }
+  cur = run;
+  return { current: cur, longest };
+}
+
+function restStats(upTo = today()) {
+  let planned = 0, taken = 0, plannedTaken = 0;
+  for (let d = ROADMAP_START; d <= upTo; d = addDays(d, 1)) {
+    const info = dayInfo(d), log = S().logs[d];
+    if (info.type === 'rest') { planned++; if (!log || workHours(log) < 2) { taken++; plannedTaken++; } }
+    else if (info.type !== 'exam' && log && workHours(log) < 1 && num(log.rest) >= 3) taken++;
+  }
+  return { planned, taken, plannedTaken };
+}
+
+function burnout() {
+  const t = today();
+  let d = S().logs[t] ? t : addDays(t, -1);
+  let heavy = 0;
+  for (let i = 0; i < 14; i++, d = addDays(d, -1)) { if (loadHours(S().logs[d]) >= 6) heavy++; else break; }
+  let sinceRest = 0; d = t;
+  for (let i = 0; i < 30 && d >= ROADMAP_START; i++, d = addDays(d, -1)) {
+    const info = dayInfo(d), log = S().logs[d];
+    const rested = (info.type === 'rest' && workHours(log) < 2) || (log && workHours(log) < 1.5 && d < t) || num(log && log.rest) >= 4;
+    if (rested) break; sinceRest++;
+  }
+  return { heavy, sinceRest, warn: heavy >= 4 || sinceRest >= 14 };
+}
+
+/* =========================================================
+   7. TOPIC METRICS: course completion vs skill mastery
+   ========================================================= */
+const CHECK_VAL = { yes: 10, some: 6, help: 6, no: 2 };
+function combine(pairs) {
+  const valid = pairs.filter(([v]) => v !== null && v !== undefined && !isNaN(v));
+  if (!valid.length) return null;
+  const w = valid.reduce((a, [, x]) => a + x, 0);
+  return valid.reduce((a, [v, x]) => a + v * x, 0) / w;
+}
+function effDays(tid) { const t = TOPIC[tid], ts = S().topicState[tid] || {}; return ts.essentials ? Math.max(1, Math.ceil(t.days * 0.7)) : t.days; }
+function projectProgress(p) { return p.milestones.length ? Math.round(p.milestones.filter(m => m.done).length / p.milestones.length * 100) : 0; }
+
+const _mcache = {};
+function clearMetricCache() { for (const k in _mcache) delete _mcache[k]; }
+function topicMetrics(tid) {
+  if (_mcache[tid]) return _mcache[tid];
+  const t = TOPIC[tid];
+  const ts = S().topicState[tid] || {};
+  const logs = Object.values(S().logs).filter(l => l.topicId === tid);
+  const tgt = num(S().settings.codingTarget) || 2;
+  const ed = effDays(tid);
+  const credits = logs.reduce((a, l) => a + credit(l), 0);
+  const course = ts.courseDone ? 100 : Math.min(100, Math.round(credits / ed * 100));
+  const hours = { study: 0, coding: 0, project: 0, revision: 0 };
+  logs.forEach(l => { for (const k in hours) hours[k] += num(l[k]); });
+  const checks = S().checks[tid] || [];
+  const last = checks[checks.length - 1] || null;
+
+  const uLogs = logs.length ? avg(logs.map(l => num(l.understanding))) : null;
+  const uCheck = last ? (CHECK_VAL[last.concept] + CHECK_VAL[last.recall]) / 2 : null;
+  const revs = S().revisions.filter(r => r.topicId === tid && r.done);
+  const retention = revs.length ? avg(revs.map(r => r.score)) / 10 : null;
+  const understanding = combine([[uLogs, 0.4], [uCheck, 0.6], [retention, 0.2]]);
+
+  const codingRatio = logs.length ? Math.min(1, hours.coding / (ed * tgt)) * 10 : null;
+  const noTut = logs.length ? logs.filter(l => l.noTutorial).length / logs.length * 10 : null;
+  const pCheck = last ? CHECK_VAL[last.practical] : null;
+  const practical = combine([[codingRatio, 0.3], [noTut, 0.2], [pCheck, 0.5]]);
+
+  const projs = S().projects.filter(p => p.stack.includes(tid));
+  const projProg = projs.length ? Math.max(...projs.map(projectProgress)) / 10 : 0;
+  const applied = logs.length ? logs.filter(l => l.applied || num(l.project) > 0).length / logs.length * 10 : null;
+  const bCheck = last ? CHECK_VAL[last.build] : null;
+  const projectUsage = (logs.length || last) ? combine([[projProg, 0.4], [applied, 0.2], [bCheck, 0.4]]) : null;
+  const portfolio = projs.length ? Math.max(...projs.map(p => projectProgress(p) > 0 ? (p.repo ? 3 : 0) + (p.readme ? 3 : 0) + (p.deployed ? 2 : 0) + (p.demo ? 2 : 0) : 0)) : 0;
+
+  const started = logs.length > 0 || !!last || !!ts.courseDone;
+  let mastery = 0;
+  if (started) {
+    const U = understanding || 0, P = practical || 0, J = projectUsage || 0;
+    if (retention === null) mastery = Math.min(85, (U * 0.3 + P * 0.35 + J * 0.2) / 0.85 * 10);
+    else mastery = (U * 0.3 + P * 0.35 + J * 0.2 + retention * 0.15) * 10;
+  }
+  mastery = Math.round(mastery);
+
+  let status;
+  const plannedStart = Object.values(BASE_DAYS).find(d => d.topicId === tid);
+  if (!started) status = plannedStart && plannedStart.date <= today() ? 'Not started' : 'Upcoming';
+  else if (course >= 80 && mastery < 35) status = 'Weak';
+  else if (mastery >= 75 && (practical || 0) >= 7) status = 'Strong';
+  else if ((understanding || 0) < 6) status = 'Needs Revision';
+  else if ((practical || 0) < 6) status = 'Needs Practice';
+  else if ((projectUsage || 0) < 5) status = 'Needs Project';
+  else status = 'Developing';
+
+  const m = { tid, t, logs, credits, course, hours, checks, last, decision: last ? last.decision : null, understanding, practical, projectUsage, retention, portfolio, mastery, status, started, completed: !!ts.completedOn, ts, projs, revs };
+  _mcache[tid] = m;
+  return m;
+}
+const STATUS_TONE = { 'Strong': 'green', 'Developing': 'blue', 'Needs Revision': 'yellow', 'Needs Practice': 'yellow', 'Needs Project': 'yellow', 'Weak': 'red', 'Not started': 'muted', 'Upcoming': 'muted' };
+const level = v => (v === null || v === undefined ? 'Untested' : v >= 7.5 ? 'Strong' : v >= 5 ? 'Medium' : v > 0 ? 'Weak' : 'None');
+const LEVEL_TONE = { Strong: 'green', Medium: 'yellow', Weak: 'red', None: 'red', Untested: 'muted' };
+
+function decide(c) {
+  const v = { yes: 2, some: 1, help: 1, no: 0 };
+  const und = v[c.concept] + v[c.recall], doing = v[c.practical] + v[c.build], tot = und + doing;
+  if (tot <= 2) return 'Repeat Topic';
+  if (tot >= 7) return 'Continue';
+  if (und <= 1) return 'Revise';
+  if (doing <= 1) return 'Practice More';
+  return und < doing ? 'Revise' : 'Practice More';
+}
+const DECISION_TONE = { 'Continue': 'green', 'Revise': 'yellow', 'Practice More': 'yellow', 'Repeat Topic': 'red' };
+
+function completionGate(tid) {
+  const m = topicMetrics(tid);
+  const why = [];
+  if (!m.last) why.push('Take the capability check first.');
+  else if (m.decision !== 'Continue') why.push(`Your last check says “${m.decision}”.`);
+  if ((m.understanding || 0) < 7) why.push(`Understanding is ${r1(m.understanding || 0)}/10 (needs 7).`);
+  if ((m.practical || 0) < 6) why.push(`Practical ability is ${r1(m.practical || 0)}/10 (needs 6).`);
+  return { ok: why.length === 0, why };
+}
+
+function scheduleRevisions(tid, from) {
+  if (S().revisions.some(r => r.topicId === tid && typeof r.interval === 'number')) return;
+  for (const n of REVISION_INTERVALS) {
+    let due = addDays(from, n), moved = false;
+    while (isExam(due)) { due = addDays(due, 1); moved = true; }
+    S().revisions.push({ id: `${tid}-${n}`, topicId: tid, interval: n, due, done: false, moved });
+  }
+}
+
+/* =========================================================
+   8. ROADMAP HEALTH + CATCH-UP
+   ========================================================= */
+function health() {
+  const t = today();
+  const plannedCount = {};
+  for (let d = ROADMAP_START; d <= t; d = addDays(d, 1)) {
+    const info = dayInfo(d);
+    if (info.type !== 'learn') continue;
+    if (d === t && !S().logs[t]) continue; // today counts once you check in
+    plannedCount[info.topicId] = (plannedCount[info.topicId] || 0) + 1;
+  }
+  let plannedTotal = 0, actualTotal = 0;
+  const rows = [];
+  for (const tp of TOPICS) {
+    const m = topicMetrics(tp.id), ed = effDays(tp.id);
+    const pDays = Math.min(plannedCount[tp.id] || 0, ed);
+    const aDays = m.ts.courseDone || m.completed ? ed : Math.min(m.credits, ed);
+    plannedTotal += pDays; actualTotal += aDays;
+    if (pDays > 0 || aDays > 0) rows.push({ tid: tp.id, planned: Math.round(pDays / ed * 100), actual: Math.round(aDays / ed * 100), mastery: m.mastery });
+  }
+  const behind = r1(plannedTotal - actualTotal);
+  const tone = behind <= 1 ? 'green' : behind <= 3 ? 'yellow' : 'red';
+  const label = behind <= 1 ? 'On track' : behind <= 3 ? 'Slightly behind' : 'Significantly behind';
+  return { behind, tone, label, rows, plannedTotal, actualTotal };
+}
+
+function catchUpOptions(h) {
+  const t = today(), n = Math.ceil(h.behind);
+  const cur = currentTopic();
+  const rests = [];
+  for (let d = t; d <= addDays(t, 45) && rests.length < 3; d = addDays(d, 1)) {
+    const b = BASE_DAYS[d];
+    if (b && b.type === 'rest') rests.push({ date: d, converted: !!S().overrides[d] });
+  }
+  return { n, finish: addDays(LAST_LEARNING_DAY, n), rests, topic: cur };
+}
+
+function currentTopic() {
+  const t = today();
+  const info = dayInfo(t);
+  if (info.type === 'learn') return info.topicId;
+  for (let d = t; d >= ROADMAP_START; d = addDays(d, -1)) { const i = dayInfo(d); if (i.type === 'learn') return i.topicId; }
+  return 'python';
+}
+function nextLearnDay(from) { for (let d = addDays(from, 1), i = 0; i < 120; i++, d = addDays(d, 1)) { const x = dayInfo(d); if (x.type === 'learn') return x; } return null; }
+
+/* =========================================================
+   9. CAPABILITY CHECK SCHEDULER ("Am I actually learning?")
+   ========================================================= */
+function dueCheck() {
+  const t = today(), info = dayInfo(t);
+  const recent = (tid, days) => (S().checks[tid] || []).some(c => diffDays(c.date, t) < days);
+  if (info.type === 'exam' || info.type === 'pre') return null;
+  if (info.type === 'learn' && info.dayIdx && info.dayIdx >= Math.ceil(info.dayCount / 2) && !recent(info.topicId, 2))
+    return { tid: info.topicId, reason: info.dayIdx === info.dayCount ? 'Last planned day of this topic.' : 'You are past the halfway point of this topic.' };
+  for (const tp of TOPICS) {
+    const m = topicMetrics(tp.id);
+    if (m.course >= 80 && m.decision && m.decision !== 'Continue' && !recent(tp.id, 3)) return { tid: tp.id, reason: `Your last result was “${m.decision}”. Re-check after working on it.` };
+    if (m.course >= 80 && !m.last) return { tid: tp.id, reason: 'Course completion is high but capability has never been checked.' };
+  }
+  const done = TOPICS.filter(tp => topicMetrics(tp.id).last && !recent(tp.id, 10));
+  if (done.length && diffDays(ROADMAP_START, t) % 5 === 0) return { tid: done[diffDays(ROADMAP_START, t) % done.length].id, reason: 'Spot check on an earlier topic.' };
+  return null;
+}
+function checkQuestions(tid) {
+  const t = TOPIC[tid];
+  return [
+    { key: 'concept', kind: 'Concept check', q: `Can you explain ${t.k} without looking at your notes?`, opts: [['yes', 'Yes'], ['some', 'Somewhat'], ['no', 'No']] },
+    { key: 'practical', kind: 'Practical check', q: `Can you ${t.p} without following a tutorial?`, opts: [['yes', 'Yes'], ['help', 'With some help'], ['no', 'No']] },
+    { key: 'recall', kind: 'Recall check', q: `Can you explain what ${tName(tid)} solves and when you would use it?`, opts: [['yes', 'Yes'], ['some', 'Somewhat'], ['no', 'No']] },
+    { key: 'build', kind: 'Build check', q: `Can you build a small project using ${tName(tid)}?`, opts: [['yes', 'Yes'], ['help', 'With help'], ['no', 'No']] },
+  ];
+}
+
+/* =========================================================
+   10. PERSONAL LEARNING ADVISOR
+   ========================================================= */
+function revisionsDue(d = today()) { return S().revisions.filter(r => !r.done && r.due <= d).sort((a, b) => a.due.localeCompare(b.due)); }
+
+function advisor() {
+  const t = today(), info = dayInfo(t), out = { headline: '', focus: [], rec: '', notes: [] };
+  const bo = burnout(), h = health(), due = revisionsDue(t);
+  const recentLogs = [1, 2, 3].map(i => S().logs[addDays(t, -i)]).filter(Boolean);
+  const passive = recentLogs.length >= 2 && recentLogs.reduce((a, l) => a + num(l.study), 0) > 2 * recentLogs.reduce((a, l) => a + num(l.coding), 0) + 1;
+  const nextExam = EXAM_PERIODS.find(p => p.start > t);
+  const daysToExam = nextExam ? diffDays(t, nextExam.start) : null;
+
+  if (info.type === 'pre') {
+    const first = dayInfo(ROADMAP_START);
+    out.headline = `Roadmap starts ${fmt(ROADMAP_START, { wd: true })} with ${tName(first.topicId)}, Day 1/7.`;
+    out.focus = ['Install Python and set up a virtual environment', 'Create one GitHub repo for all roadmap exercises', 'Decide your daily coding block (at least 90 minutes)'];
+    out.rec = 'Set up today so tomorrow is spent writing code, not configuring tools.';
+    return out;
+  }
+  if (info.type === 'exam') {
+    const ex = examFor(t);
+    out.headline = `University exams. Protected until ${fmt(ex.end, { wd: true })} (${diffDays(t, ex.end) + 1} days left).`;
+    out.focus = ['Study for your exams', 'Log university hours in check-in', 'Sleep properly'];
+    out.rec = 'No roadmap learning is expected. Your technical progress is paused, not falling behind.';
+    if (due.length) out.notes.push(`${due.length} revision checkpoint${due.length > 1 ? 's are' : ' is'} waiting. They will still be there after exams.`);
+    return out;
+  }
+  if (bo.warn) out.notes.push(bo.heavy >= 4 ? `You've been pushing hard for ${bo.heavy} days straight. Consider taking a rest day.` : `${bo.sinceRest} days without a real break. A rest day now protects the next two weeks.`);
+
+  if (info.type === 'rest') {
+    out.headline = 'Rest day. It counts toward consistency.';
+    out.focus = ['Stay away from tutorials today', 'Walk, sleep, see people'];
+    out.rec = h.behind > 3 && !bo.warn ? `You are ${h.behind} learning days behind. You may convert this into a study day from Roadmap → Catch-up, but resting is also a valid choice.` : 'Rest is part of the plan. Tomorrow will go better for it.';
+    return out;
+  }
+  if (info.type === 'project') {
+    out.headline = info.label || 'Project day';
+    const p = S().projects.find(pp => projectProgress(pp) < 100);
+    out.focus = p ? [`Work on ${p.name}`, `Next milestone: ${(p.milestones.find(m => !m.done) || {}).name || 'polish'}`, 'Commit and push before you stop'] : PROJECT_DAY_TASKS.slice(0, 3);
+    out.rec = 'Project days are where skills become evidence. Build first, look things up only when blocked.';
+    if (due.length) out.focus.unshift(`Do ${due.length} revision checkpoint${due.length > 1 ? 's' : ''} first (about 30 min)`);
+    return out;
+  }
+  // learning day
+  const tid = info.topicId, m = topicMetrics(tid);
+  out.headline = info.converted ? `Catch-up day for ${tName(tid)}.` : `You're on Day ${info.dayIdx}/${info.dayCount} of ${tName(tid)}.`;
+  const checked = S().taskChecks[t] || {};
+  out.focus = plannedTasks(t).filter(x => !checked[x]).slice(0, 3);
+  if (due.length) out.focus.unshift(`Revision first: ${[...new Set(due.map(r => tName(r.topicId)))].slice(0, 2).join(', ')} (about ${Math.min(due.length, 3) * 15} min)`);
+  out.focus = out.focus.slice(0, 4);
+
+  // previous topic not yet solid
+  const prev = [...TOPICS].reverse().find(tp => tp.id !== tid && topicMetrics(tp.id).started && topicMetrics(tp.id).decision && topicMetrics(tp.id).decision !== 'Continue');
+  if (m.started && (m.understanding || 0) >= 7 && (m.practical || 0) < 6) out.rec = 'Your understanding is good but your practical score is low. Spend less time watching lectures today and code for at least 90 minutes.';
+  else if (m.started && (m.understanding || 0) < 6) out.rec = 'Understanding is still shaky. Slow down: re-explain each concept in your own notes before adding new material.';
+  else if (passive) out.rec = 'The last few days were mostly watching. Today, write code before you open any video.';
+  else if (prev) out.rec = `${tName(prev.id)} still says “${topicMetrics(prev.id).decision}”. Spend 45 minutes on it before continuing.`;
+  else if (m.started && (m.projectUsage || 0) < 4 && info.dayIdx === info.dayCount) out.rec = `Last day of ${tName(tid)}: use it in a project so it shows up as real evidence.`;
+  else out.rec = 'Aim for at least 90 minutes of your own code today. Write down one thing you built.';
+
+  if (daysToExam !== null && daysToExam <= 5) out.notes.push(`Exams start in ${daysToExam} day${daysToExam === 1 ? '' : 's'}. Consolidate what you have instead of going deep into new material.`);
+  if (h.behind > 3) out.notes.push(`You are ${h.behind} learning days behind. See Roadmap for catch-up options.`);
+  return out;
+}
+
+/* =========================================================
+   11. PERIOD STATS + REVIEWS
+   ========================================================= */
+function periodStats(from, to) {
+  const s = { study: 0, coding: 0, project: 0, revision: 0, university: 0, rest: 0, scores: [], days: 0, consistent: 0, expected: 0, protected: 0, logged: 0, topicsDone: 0, byTopic: {} };
+  for (let d = from; d <= to; d = addDays(d, 1)) {
+    if (d > today()) break;
+    s.days++;
+    const l = S().logs[d], st = dayStatus(d), info = dayInfo(d);
+    if (info.type === 'exam') s.protected++; else if (info.type !== 'pre') { s.expected++; if (STREAK_ADD.has(st)) s.consistent++; }
+    if (l) {
+      s.logged++;
+      for (const k of ['study', 'coding', 'project', 'revision', 'university', 'rest']) s[k] += num(l[k]);
+      if (workHours(l) > 0) s.scores.push(scoreLog(l).total);
+      if (l.topicId && TOPIC[l.topicId]) s.byTopic[l.topicId] = (s.byTopic[l.topicId] || 0) + workHours(l);
+    }
+  }
+  s.topicsDone = TOPICS.filter(tp => { const c = (S().topicState[tp.id] || {}).completedOn; return c && c >= from && c <= to; }).length;
+  s.avgScore = s.scores.length ? Math.round(avg(s.scores)) : null;
+  return s;
+}
+
+function weeklyRecommendation(ws) {
+  const we = addDays(ws, 6), st = periodStats(ws, we), recs = [];
+  if (st.logged < 3 && !isExam(ws)) return ['Log at least three check-ins this week to get a recommendation based on data rather than guesses.'];
+  const nextInfo = nextLearnDay(we);
+  for (const tid of Object.keys(st.byTopic)) {
+    const m = topicMetrics(tid);
+    if (m.course >= 80 && (m.practical || 0) < 7) recs.push(`You completed ${tName(tid)} but your practical score is only ${r1(m.practical || 0)}/10. Spend 2 additional hours this week building with it${nextInfo && nextInfo.topicId !== tid ? ` before moving deeper into ${tName(nextInfo.topicId)}` : ''}.`);
+    else if (m.course >= 80 && (m.understanding || 0) < 6) recs.push(`${tName(tid)} is marked done in hours, but understanding is ${r1(m.understanding || 0)}/10. Rewrite your notes from memory and retake the check.`);
+  }
+  if (st.study > 2 * st.coding + 2) recs.push(`Study-to-coding ratio was ${r1(st.study / Math.max(st.coding, 0.5))}:1. Aim to flip it next week: code first, watch only when stuck.`);
+  if (st.avgScore !== null && st.avgScore < 60) recs.push(`Average learning quality was ${st.avgScore}/100. The fastest gains are in coding without tutorials and logging what you built.`);
+  const od = revisionsDue(we).length; if (od) recs.push(`Clear ${od} pending revision checkpoint${od > 1 ? 's' : ''} early in the week.`);
+  const nextExam = EXAM_PERIODS.find(p => p.start > we && diffDays(we, p.start) <= 8);
+  if (nextExam) recs.push(`Exams begin ${fmt(nextExam.start, { wd: true })}. Plan light consolidation, not new heavy topics.`);
+  const h = health(); if (h.behind > 3) recs.push(`You are ${h.behind} days behind. Pick one catch-up option on the Roadmap page rather than cramming.`);
+  if (st.project < 1 && st.expected >= 4) recs.push('No project hours this week. Book at least 2 hours to apply what you learned.');
+  if (!recs.length) recs.push('Solid week. Keep the same balance and add one small build without notes.');
+  return recs;
+}
+
+function overallCompletion(filter = () => true) {
+  const ts = TOPICS.filter(filter); const tot = ts.reduce((a, t) => a + t.days, 0);
+  const course = ts.reduce((a, t) => a + topicMetrics(t.id).course * t.days, 0) / tot;
+  const mastery = ts.reduce((a, t) => a + topicMetrics(t.id).mastery * t.days, 0) / tot;
+  return { course: Math.round(course), mastery: Math.round(mastery) };
+}
+
+function monthlyAnalysis(ym) {
+  const [y, mo] = ym.split('-').map(Number);
+  const from = `${ym}-01`, to = toISO(new Date(y, mo, 0));
+  const st = periodStats(from, to);
+  const started = TOPICS.map(t => topicMetrics(t.id)).filter(m => m.started);
+  const a = { st, from, to, strong: [], weak: [], unused: [], needTime: [], lowValue: null, projects: null, slow: null, revise: null, verdict: '' };
+  if (st.logged < 5) { a.verdict = 'Not enough logged data this month for an honest assessment. Log daily check-ins for at least a week, then come back.'; return a; }
+  a.strong = started.filter(m => m.status === 'Strong').map(m => m.tid);
+  a.weak = started.filter(m => ['Weak', 'Needs Revision'].includes(m.status) || m.mastery < 40).map(m => m.tid);
+  a.unused = started.filter(m => m.course >= 70 && (m.projectUsage || 0) < 4).map(m => m.tid);
+  const h = health();
+  a.needTime = h.rows.filter(r => r.planned - r.actual >= 40).map(r => r.tid);
+  const topicH = Object.values(st.byTopic).reduce((x, y) => x + y, 0);
+  const medH = Object.entries(st.byTopic).filter(([id]) => TOPIC[id].rel === 'Medium').reduce((x, [, v]) => x + v, 0);
+  a.lowValue = topicH > 0 && medH / topicH > 0.35 ? `${Math.round(medH / topicH * 100)}% of topic hours went to medium-relevance topics. Check whether that depth is needed now.` : 'Time is concentrated on high-relevance topics.';
+  const workTot = st.study + st.coding + st.project + st.revision;
+  a.projects = workTot > 0 && st.project / workTot < 0.15 ? `Only ${Math.round(st.project / workTot * 100)}% of your time went to projects. You need more projects to turn topics into evidence.` : 'Project time share is reasonable.';
+  const avgU = avg(started.map(m => m.understanding || 0)) || 0;
+  a.slow = h.behind <= 0 && avgU < 6.5 ? 'You are keeping pace but average understanding is below 6.5/10. Slow down.' : h.behind > 5 && (st.avgScore || 0) >= 70 ? 'Quality is good but the timeline is too tight. Extend the plan rather than cutting depth.' : 'Pace looks sustainable.';
+  const od = revisionsDue().length;
+  const lowRet = started.filter(m => m.retention !== null && m.retention < 6).map(m => tName(m.tid));
+  a.revise = od || lowRet.length ? `${od} revision checkpoint${od === 1 ? '' : 's'} pending${lowRet.length ? `; weak retention in ${lowRet.join(', ')}` : ''}. Revise before adding more.` : 'Revision is up to date.';
+  const gap = avg(started.map(m => m.course - m.mastery)) || 0;
+  if (gap > 30) a.verdict = `The roadmap itself is fine, but you are completing topics about ${Math.round(gap)} points faster than you are gaining capability. Keep the roadmap, reduce the pace, and add building time.`;
+  else if (h.behind > 5) a.verdict = `The content is still worth following, but the schedule is not matching reality (${h.behind} days behind). Re-plan using the catch-up options instead of skipping depth.`;
+  else if ((st.avgScore || 0) >= 70 && gap <= 20) a.verdict = 'Yes. Completion and capability are moving together and quality is consistently good. Keep going.';
+  else a.verdict = 'Mostly yes, with adjustments: prioritize the weak topics and project work listed below before pushing forward.';
+  return a;
+}
+/* =========================================================
+   12. UI HELPERS + SVG CHARTS
+   ========================================================= */
+const UI = { checkinDate: null, calMonth: null, skillSel: null, skillFilter: 'all', week: null, month: null, revTab: 'due' };
+const chip = (text, tone = 'muted') => `<span class="chip bg-${tone}">${esc(text)}</span>`;
+const bar = (pct, tone = 'green', ghostPct = null, thin = false) => `<div class="bar${thin ? ' thin' : ''}">${ghostPct !== null ? `<i class="fill-${tone} ghost" style="width:${clamp(ghostPct, 0, 100)}%"></i>` : ''}<i class="fill-${tone}" style="width:${clamp(pct, 0, 100)}%"></i></div>`;
+const catTone = tid => (TOPIC[tid] && TOPIC[tid].cat !== 'backend' ? 'purple' : 'teal');
+const TYPE_TONE = { learn: 'teal', rest: 'muted', project: 'blue', exam: 'red', pre: 'muted' };
+const pctTone = v => (v >= 75 ? 'green' : v >= 50 ? 'yellow' : 'red');
+const tenTone = v => (v === null || v === undefined ? 'muted' : v >= 7.5 ? 'green' : v >= 5 ? 'yellow' : 'red');
+const fmtTen = v => (v === null || v === undefined ? '—' : `${r1(v)}/10`);
+const miniBar = (v10, tone) => `<span class="mini-bar"><i class="fill-${tone}" style="width:${clamp((v10 || 0) * 10, 0, 100)}%"></i></span>`;
+const pageHead = (title, sub, actions = '') => `<div class="page-head"><div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div class="head-actions">${actions}</div></div>`;
+
+const SERIES = [
+  { key: 'study', name: 'Study', color: 'var(--blue)' },
+  { key: 'coding', name: 'Coding', color: 'var(--green)' },
+  { key: 'project', name: 'Project', color: 'var(--teal)' },
+  { key: 'revision', name: 'Revision', color: 'var(--yellow)' },
+  { key: 'university', name: 'University', color: 'var(--red)' },
+];
+const legend = series => `<div class="chart-legend">${series.map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('')}</div>`;
+
+function stackedBars(groups, series, H = 210, W = 640) {
+  const L = 30, B = 24, T = 8, ih = H - T - B;
+  const max = Math.max(1, ...groups.map(g => g.values.reduce((a, b) => a + b, 0)));
+  const step = max <= 10 ? 2 : max <= 25 ? 5 : max <= 60 ? 10 : 20;
+  const top = Math.ceil(max / step) * step;
+  const bw = (W - L) / groups.length;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  for (let v = 0; v <= top; v += step) { const y = T + ih * (1 - v / top); s += `<line class="grid-line" x1="${L}" x2="${W}" y1="${y}" y2="${y}"/><text x="${L - 6}" y="${y + 4}" text-anchor="end">${v}</text>`; }
+  groups.forEach((g, i) => {
+    let y = T + ih; const x = L + i * bw + bw * 0.22, w = bw * 0.56;
+    g.values.forEach((v, j) => { if (!v) return; const hh = v / top * ih; y -= hh; s += `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(hh, 0.5)}" rx="2" style="fill:${series[j].color}"><title>${esc(g.label)}: ${series[j].name} ${r1(v)}h</title></rect>`; });
+    s += `<text x="${x + w / 2}" y="${H - 6}" text-anchor="middle">${esc(g.label)}</text>`;
+  });
+  return `<div class="chart">${s}</svg></div>${legend(series)}`;
+}
+
+function lineChart(points, H = 200, max = 100) {
+  const W = 640, L = 30, B = 24, T = 10, ih = H - T - B, iw = W - L - 8;
+  const x = i => L + (points.length === 1 ? iw / 2 : i / (points.length - 1) * iw);
+  const y = v => T + ih * (1 - v / max);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  for (let v = 0; v <= max; v += max / 4) s += `<line class="grid-line" x1="${L}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  const ok = points.map((p, i) => [p, i]).filter(([p]) => p.value !== null);
+  if (ok.length > 1) s += `<polyline fill="none" style="stroke:var(--text)" stroke-width="1.8" stroke-linejoin="round" points="${ok.map(([p, i]) => `${x(i)},${y(p.value)}`).join(' ')}"/>`;
+  ok.forEach(([p, i]) => { s += `<circle cx="${x(i)}" cy="${y(p.value)}" r="3.2" style="fill:var(--${pctTone(p.value)})"><title>${esc(p.label)}: ${p.value}</title></circle>`; });
+  const every = Math.ceil(points.length / 8);
+  points.forEach((p, i) => { if (i % every === 0 || i === points.length - 1) s += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle">${esc(p.label)}</text>`; });
+  if (!ok.length) s += `<text x="${W / 2}" y="${H / 2}" text-anchor="middle">No scored days in this range yet</text>`;
+  return `<div class="chart">${s}</svg></div>`;
+}
+
+function weekGroups(n) {
+  const groups = []; let ws = weekStart(today());
+  for (let i = n - 1; i >= 0; i--) {
+    const s = addDays(ws, -7 * i), st = periodStats(s, addDays(s, 6));
+    groups.push({ label: fmt(s), values: SERIES.map(se => st[se.key]) });
+  }
+  return groups;
+}
+
+/* =========================================================
+   13. DASHBOARD
+   ========================================================= */
+function pipelineData() {
+  const started = TOPICS.map(t => topicMetrics(t.id)).filter(m => m.started);
+  if (!started.length) return null;
+  const a = f => { const v = started.map(f).filter(x => x !== null && x !== undefined); return v.length ? Math.round(avg(v)) : null; };
+  return [
+    { nm: 'Learning', v: a(m => m.course) },
+    { nm: 'Understanding', v: a(m => m.understanding === null ? null : m.understanding * 10) },
+    { nm: 'Practicing', v: a(m => m.practical === null ? null : m.practical * 10) },
+    { nm: 'Building', v: a(m => m.projectUsage === null ? null : m.projectUsage * 10) },
+    { nm: 'Retaining', v: a(m => m.retention === null ? null : m.retention * 10) },
+  ];
+}
+function pipelineVerdict(p) {
+  if (!p) return 'Starts filling in after your first check-in.';
+  const course = p[0].v || 0, build = p[3].v || 0, prac = p[2].v || 0;
+  if (course >= 50 && (build < 35 || prac < 40)) return `This currently looks like Watching → Completing → Moving on: ${course}% of the course work is done, but practicing is at ${prac}% and building at ${build}%.`;
+  let worst = null;
+  for (let i = 1; i < p.length; i++) if (p[i].v !== null && p[i - 1].v !== null) { const drop = p[i - 1].v - p[i].v; if (!worst || drop > worst.drop) worst = { drop, from: p[i - 1].nm, to: p[i].nm }; }
+  if (worst && worst.drop >= 15) return `Biggest drop is between ${worst.from.toLowerCase()} and ${worst.to.toLowerCase()} (${worst.drop} points). That is where to spend effort.`;
+  return 'Stages are moving together. Keep building and revising at this balance.';
+}
+
+function viewDashboard() {
+  const t = today(), info = dayInfo(t), log = S().logs[t], sc = scoreLog(log), st = streaks(), h = health(), adv = advisor(), bo = burnout();
+  const ph = phaseFor(t);
+  const taskDate = info.type === 'pre' ? ROADMAP_START : t;
+  const tasks = plannedTasks(taskDate), checked = S().taskChecks[taskDate] || {};
+  const doneN = tasks.filter(x => checked[x]).length, pct = tasks.length ? Math.round(doneN / tasks.length * 100) : 0;
+  const readOnly = info.type === 'pre';
+  const cur = currentTopic(), cm = topicMetrics(cur), overall = overallCompletion();
+  const pipe = pipelineData();
+  const dc = dueCheck(), due = revisionsDue(t);
+  const isSunday = fromISO(t).getDay() === 0;
+  const tomorrow = addDays(t, 1), monthEnd = tomorrow.slice(8) === '01';
+
+  let todayCard;
+  if (info.type === 'exam') {
+    const ex = examFor(t);
+    todayCard = `<div class="card exam-card">
+      <div class="today-meta">${fmt(t, { wd: true, long: true, year: true })}</div>
+      <div class="exam-title mt-s">UNIVERSITY EXAMS</div>
+      <p class="muted" style="margin:6px 0 14px">Protected academic period until ${fmt(ex.end, { wd: true, year: true })}. ${diffDays(t, ex.end) + 1} day${diffDays(t, ex.end) ? 's' : ''} left. No roadmap progress is expected and none of these days count against you.</p>
+      <div class="row"><a class="btn primary" href="#checkin/${t}">Log university study</a><span class="small muted">University hours are tracked separately from your technical roadmap.</span></div>
+    </div>`;
+  } else {
+    const heading = info.type === 'learn' ? tName(info.topicId) : info.type === 'pre' ? `Tomorrow: ${tName('python')}` : info.label || TYPE_LABEL[info.type];
+    const meta = info.type === 'learn' ? (info.converted ? 'Catch-up day (converted rest day)' : `Day ${info.dayIdx} of ${info.dayCount}${info.label ? ` · ${info.label}` : ''}`) : info.type === 'pre' ? 'Roadmap starts September 26 · Day 1 of 7' : TYPE_LABEL[info.type];
+    todayCard = `<div class="card">
+      <div class="row between"><span class="today-meta">${fmt(t, { wd: true, long: true, year: true })}${ph ? ` &nbsp;/&nbsp; ${ph.name}` : ''}</span>${chip(TYPE_LABEL[info.type], info.type === 'learn' ? catTone(info.topicId) : TYPE_TONE[info.type])}</div>
+      <div class="today-topic ${info.type === 'learn' ? 't-' + catTone(info.topicId) : ''}">${esc(heading)}</div>
+      <div class="today-meta">${esc(meta)}</div>
+      <div class="row between mt"><span class="small muted">${readOnly ? 'Preview of Day 1 tasks' : `Today's tasks: ${doneN}/${tasks.length} done`}</span><span class="small" style="font-weight:600">${readOnly ? '' : pct + '%'}</span></div>
+      <div class="mt-s">${bar(pct, pct >= 80 ? 'green' : pct >= 40 ? 'yellow' : 'blue')}</div>
+      <ul class="checks mt-s">${tasks.map(x => `<li class="${checked[x] ? 'done' : ''}">${readOnly ? '<span class="dot fill-muted" style="margin-top:8px"></span>' : `<input type="checkbox" class="cb" data-change="toggle-task" data-date="${taskDate}" data-task="${esc(x)}" ${checked[x] ? 'checked' : ''} aria-label="${esc(x)}">`}<span>${esc(x)}</span></li>`).join('')}</ul>
+      ${readOnly ? '' : `<div class="row mt-s"><input class="in" id="newTask" placeholder="Add a task for today" style="flex:1;min-width:180px"><button class="btn sm" data-action="add-task" data-date="${t}">Add task</button></div>`}
+    </div>`;
+  }
+
+  const advCard = `<div class="card advisor">
+    <h2>What should I do today?</h2>
+    <div class="mid" style="font-size:18px">${esc(adv.headline)}</div>
+    ${adv.focus.length ? `<ol>${adv.focus.map(f => `<li>${esc(f)}</li>`).join('')}</ol>` : ''}
+    <div class="rec"><strong>Recommendation.</strong> ${esc(adv.rec)}</div>
+    ${adv.notes.map(n => `<div class="flag mt-s">${esc(n)}</div>`).join('')}
+  </div>`;
+
+  let scoreCard;
+  if (info.type === 'exam' && !(log && workHours(log) > 0)) {
+    scoreCard = `<div class="card"><h2>Today's learning quality</h2><div class="big t-muted">Not expected</div><p class="small muted">Exam days are excluded from quality and pace calculations.</p>${log ? `<div class="flag blue mt-s">University study logged: ${num(log.university)}h</div>` : ''}</div>`;
+  } else if (!sc) {
+    scoreCard = `<div class="card"><h2>Today's learning quality</h2><div class="empty"><div class="mid">No check-in yet</div><p class="small">Your score is built from what you understood, coded, practiced, revised and applied, not from hours alone.</p><a class="btn primary" href="#checkin/${t}">Check in for today</a></div></div>`;
+  } else {
+    scoreCard = `<div class="card"><div class="row between"><h2 style="margin:0">Today's learning quality</h2><a class="link-btn" href="#checkin/${t}">Edit check-in</a></div>
+      <div class="row mt-s" style="align-items:baseline"><span class="big t-${pctTone(sc.total)}">${sc.total}</span><span class="muted">/100</span></div>
+      <div class="score-parts mt">${Object.keys(SCORE_MAX).map(k => `<div class="sp"><span>${SCORE_LABEL[k]}</span>${bar(sc.parts[k] / SCORE_MAX[k] * 100, pctTone(sc.parts[k] / SCORE_MAX[k] * 100), null, true)}<span class="v">${sc.parts[k]}/${SCORE_MAX[k]}</span><span class="sp-why">${esc(sc.reasons[k])}</span></div>`).join('')}</div>
+      ${sc.flags.map(f => `<div class="flag mt-s">${esc(f)}</div>`).join('')}</div>`;
+  }
+
+  const L = log || {};
+  const wk = periodStats(weekStart(t), addDays(weekStart(t), 6));
+  const timeCard = `<div class="card"><h2>Time today <span class="sub">week: ${r1(wk.study + wk.coding + wk.project + wk.revision)}h technical</span></h2>
+    <div class="kv">${[['Study', L.study], ['Coding', L.coding], ['Project', L.project], ['University', L.university]].map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${r1(num(v))}h</div></div>`).join('')}</div>
+    <div class="mt">${stackedBars(weekDays(t), SERIES, 150, 320)}</div></div>`;
+
+  const statusCard = `<div class="stack">
+    <div class="card"><h2>Streak</h2><div class="row" style="align-items:baseline;gap:18px"><div><span class="big">${st.current}</span><span class="muted"> days</span></div><div class="small muted">Longest ${st.longest}</div></div>
+      <p class="tiny muted" style="margin:8px 0 0">Counts days with a real session (score 40+ or target met) and rest days. Exam days pause it. Opening the app doesn't count.</p></div>
+    <a class="card" href="#roadmap" style="text-decoration:none;color:inherit;display:block"><h2>Am I on track?</h2><div class="row"><span class="dot fill-${h.tone}"></span><span class="mid t-${h.tone}" style="font-size:19px">${h.label}</span></div>
+      <p class="small muted" style="margin:6px 0 0">${h.behind > 0.4 ? `${h.behind} learning day${h.behind === 1 ? '' : 's'} behind the plan.` : h.behind < -0.4 ? `${Math.abs(h.behind)} learning days ahead of the plan.` : 'Matching the planned schedule.'} ${info.type === 'exam' ? 'The count is paused during exams. ' : ''}Open the roadmap for details.</p></a>
+  </div>`;
+
+  const vsCard = `<div class="card">
+    <h2>Capability pipeline <span class="sub">across all started topics</span></h2>
+    ${pipe ? `<div class="pipe">${pipe.map(p => `<div class="pipe-stage"><div class="nm">${p.nm}</div><div class="vl ${p.v === null ? 't-muted' : ''}">${p.v === null ? '—' : p.v + '%'}</div><span class="pipe-fill fill-${p.v === null ? 'muted' : pctTone(p.v)}" style="width:${p.v || 0}%"></span></div>`).join('')}</div>` : `<div class="empty small">The pipeline fills in as you log check-ins, take capability checks, build projects and do revisions.</div>`}
+    <p class="small" style="margin:12px 0 0">${esc(pipelineVerdict(pipe))}</p>
+    <div class="divider"></div>
+    <div class="versus">
+      <div><div class="small muted">${esc(tName(cur))}</div><div class="row" style="gap:24px;margin-top:6px"><div><div class="vs-num">${cm.course}%</div><div class="vs-lab">Course completion</div></div><div><div class="vs-num t-${cm.started ? pctTone(cm.mastery) : 'muted'}">${cm.mastery}%</div><div class="vs-lab">Skill mastery</div></div></div></div>
+      <div><div class="small muted">Whole roadmap</div><div class="row" style="gap:24px;margin-top:6px"><div><div class="vs-num">${overall.course}%</div><div class="vs-lab">Course completion</div></div><div><div class="vs-num">${overall.mastery}%</div><div class="vs-lab">Skill mastery</div></div></div></div>
+    </div></div>`;
+
+  const side = [];
+  if (dc) side.push(`<div class="card"><h2>Am I actually learning?</h2><p class="small muted" style="margin:0 0 6px">${esc(dc.reason)}</p><div class="mid" style="font-size:17px">${esc(tName(dc.tid))} capability check</div><p class="small" style="margin:6px 0 12px">Four honest questions. The answers decide whether you continue, revise, practice more, or repeat the topic.</p><button class="btn primary" data-action="open-check" data-tid="${dc.tid}">Take the check</button></div>`);
+  if (due.length && info.type !== 'exam') side.push(`<div class="card"><h2>Revision due <span class="sub">${due.length}</span></h2><ul class="checks">${due.slice(0, 4).map(r => `<li><span class="dot fill-${r.due < t ? 'yellow' : 'blue'}" style="margin-top:8px"></span><span style="flex:1">${esc(tName(r.topicId))} <span class="muted small">· ${r.interval === 'retry' ? 're-check' : r.interval + '-day'} · ${r.due < t ? 'overdue since ' + fmt(r.due) : 'today'}</span></span><button class="btn sm" data-action="open-revision" data-id="${r.id}">Start</button></li>`).join('')}</ul></div>`);
+  if (isSunday) side.push(`<div class="card"><h2>Weekly review is ready</h2><p class="small muted" style="margin:0 0 12px">Seven questions and a recommendation for next week, based on what you logged.</p><a class="btn" href="#weekly">Open weekly review</a></div>`);
+  if (monthEnd) side.push(`<div class="card"><h2>Monthly review is ready</h2><p class="small muted" style="margin:0 0 12px">An honest look at whether this roadmap is still worth following.</p><a class="btn" href="#monthly">Open monthly review</a></div>`);
+
+  return `${pageHead('Dashboard', '', `<a class="btn primary" href="#checkin/${t}">${log ? 'Update check-in' : 'Daily check-in'}</a>`)}
+    <div class="stack view-enter">
+      <div class="hero">${todayCard}${advCard}</div>
+      <div class="grid g-3">${scoreCard}${timeCard}${statusCard}</div>
+      <div class="grid ${side.length ? 'g-main' : ''}">${vsCard}${side.length ? `<div class="stack">${side.join('')}</div>` : ''}</div>
+    </div>`;
+}
+function weekDays(t) {
+  const ws = weekStart(t);
+  return [0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(ws, i), l = S().logs[d] || {}; return { label: WD[fromISO(d).getDay()], values: SERIES.map(s => num(l[s.key])) }; });
+}
+
+/* =========================================================
+   14. DAILY CHECK-IN
+   ========================================================= */
+function viewCheckin(arg) {
+  const t = today();
+  const d = arg && /^\d{4}-\d{2}-\d{2}$/.test(arg) ? arg : t;
+  UI.checkinDate = d;
+  const info = dayInfo(d), existing = S().logs[d];
+  const L = existing || { topicId: info.type === 'learn' ? info.topicId : (info.type === 'exam' ? 'university' : info.type === 'project' ? 'project' : ''), understanding: 5, confidence: 5 };
+  const exam = info.type === 'exam';
+  const opt = (v, label) => `<option value="${v}" ${L.topicId === v ? 'selected' : ''}>${esc(label)}</option>`;
+  const hourIn = (k, label) => `<label class="f">${label}<input class="in" type="number" min="0" max="16" step="0.25" name="${k}" value="${num(L[k]) || ''}" placeholder="0" inputmode="decimal"></label>`;
+  const area = (k, label, ph) => `<label class="f">${label}<textarea class="in" name="${k}" placeholder="${ph}">${esc(L[k] || '')}</textarea></label>`;
+  const cbx = (k, label) => `<label class="f inline"><input type="checkbox" class="cb" name="${k}" ${L[k] ? 'checked' : ''}>${label}</label>`;
+  const range = (k, label) => `<label class="f">${label}<div class="range-wrap"><input type="range" min="1" max="10" name="${k}" value="${L[k] || 5}"><output>${L[k] || 5}</output></div></label>`;
+
+  const planBanner = exam
+    ? `<div class="card exam-card"><div class="exam-title" style="font-size:20px">UNIVERSITY EXAMS</div><p class="small" style="margin:4px 0 0">Protected period. Log your university study here. Technical fields are optional and nothing is expected from you.</p></div>`
+    : `<div class="card flat"><div class="row between"><div><div class="small muted">Plan for ${fmt(d, { wd: true, year: true })}</div><div class="mid" style="font-size:18px">${info.type === 'learn' ? `${esc(tName(info.topicId))}${info.dayIdx ? ` · Day ${info.dayIdx}/${info.dayCount}` : ''}` : esc(info.label || TYPE_LABEL[info.type])}</div></div>${chip(TYPE_LABEL[info.type], info.type === 'learn' ? catTone(info.topicId) : TYPE_TONE[info.type])}</div>
+       <div class="small muted mt-s">${plannedTasks(d).slice(0, 6).map(esc).join(' · ')}</div></div>`;
+
+  const uni = `<div class="card"><h2>University study <span class="sub">tracked separately, never affects roadmap progress</span></h2><div class="grid g-2">${hourIn('university', 'University hours')}${area('uniNotes', 'Subjects / notes', 'e.g. Data Structures past paper, 2 chapters of OS')}</div></div>`;
+
+  return `${pageHead('Daily check-in', 'What did I do today? Be specific. The score rewards building and understanding, not hours of watching.',
+      `<input type="date" class="in" style="width:auto" value="${d}" data-change="checkin-date" aria-label="Check-in date">${d !== t ? `<a class="btn" href="#checkin/${t}">Today</a>` : ''}`)}
+  <div class="grid g-main view-enter" id="checkinForm">
+    <div class="stack">
+      ${planBanner}
+      ${exam ? uni : ''}
+      <div class="card"><h2>Time</h2>
+        <label class="f mb">Topic studied<select class="in" name="topicId">
+          <option value="">Choose a topic</option>
+          <optgroup label="Backend">${TOPICS.filter(x => x.cat === 'backend').map(x => opt(x.id, x.name)).join('')}</optgroup>
+          <optgroup label="Generative AI">${TOPICS.filter(x => x.cat === 'genai').map(x => opt(x.id, x.name)).join('')}</optgroup>
+          <optgroup label="Advanced AI">${TOPICS.filter(x => x.cat === 'advanced').map(x => opt(x.id, x.name)).join('')}</optgroup>
+          <optgroup label="Other">${opt('project', 'Project work only')}${opt('university', 'University only')}${opt('rest', 'Rest')}</optgroup>
+        </select></label>
+        <div class="hours">${hourIn('study', 'Study')}${hourIn('coding', 'Coding')}${hourIn('project', 'Project')}${hourIn('revision', 'Revision')}${exam ? '' : hourIn('university', 'University')}${hourIn('rest', 'Rest')}</div>
+      </div>
+      <div class="card"><h2>What happened</h2>
+        <div class="highlight-field mb"><label class="f" style="color:var(--text)">What did I actually build today?<textarea class="in" name="built" placeholder="e.g. A /tasks CRUD endpoint with validation, written without the tutorial open">${esc(L.built || '')}</textarea></label><div class="tiny muted" style="margin-top:6px">Watching a course is not building. Write down code you produced.</div></div>
+        <div class="grid g-2">${area('learned', 'What I learned', 'In your own words, as if explaining to a friend')}${area('struggled', 'What I struggled with', 'Where did you get stuck?')}</div>
+        <div class="mt">${area('revise', 'What I need to revise', 'Concepts to revisit later')}</div>
+      </div>
+      <div class="card"><h2>Honesty checks</h2>
+        <div class="grid g-2">${cbx('selfCoded', 'I wrote the code myself (not copy-pasted)')}${cbx('noTutorial', 'I solved or built something without following a tutorial')}${cbx('reviewed', 'I reviewed previously learned material')}${cbx('applied', 'I applied this to a project or practical use')}</div>
+        <div class="divider"></div>
+        <div class="f" style="margin-bottom:14px"><span class="small muted" style="font-weight:500">Did I complete today's target?</span>
+          <div class="seg mt-s" data-name="targetDone" data-value="${L.targetDone || ''}">${[['yes', 'Yes'], ['partial', 'Partially'], ['no', 'No']].map(([v, l]) => `<button type="button" data-action="seg" data-val="${v}" class="${L.targetDone === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+        <div class="grid g-2">${range('understanding', 'Understanding level')}${range('confidence', 'Confidence level')}</div>
+      </div>
+      ${exam ? '' : `<div class="card"><h2>University study <span class="sub">tracked separately, never affects roadmap progress</span></h2>${area('uniNotes', 'Subjects / notes', 'Log university hours in the Time section above')}</div>`}
+      <div class="row"><button class="btn primary" data-action="save-checkin" data-date="${d}">${existing ? 'Update check-in' : 'Save check-in'}</button>${existing ? `<button class="btn danger" data-action="delete-log" data-date="${d}">Delete this check-in</button>` : ''}</div>
+    </div>
+    <div><div class="sticky" id="scorePreview"></div></div>
+  </div>`;
+}
+function readCheckinForm(d) {
+  const root = document.getElementById('checkinForm'); if (!root) return null;
+  const val = n => { const el = root.querySelector(`[name="${n}"]`); return el ? (el.type === 'checkbox' ? el.checked : el.value) : ''; };
+  const log = { date: d };
+  ['topicId', 'learned', 'built', 'struggled', 'revise', 'uniNotes'].forEach(k => log[k] = val(k).trim ? val(k).trim() : val(k));
+  ['study', 'coding', 'project', 'revision', 'university', 'rest', 'understanding', 'confidence'].forEach(k => log[k] = num(val(k)));
+  ['selfCoded', 'noTutorial', 'reviewed', 'applied'].forEach(k => log[k] = !!val(k));
+  const seg = root.querySelector('.seg[data-name="targetDone"]'); log.targetDone = seg ? seg.dataset.value : '';
+  if (!TOPIC[log.topicId]) { /* keep non-topic markers but they earn no roadmap credit */ }
+  return log;
+}
+function updateScorePreview() {
+  const el = document.getElementById('scorePreview'); if (!el) return;
+  const d = UI.checkinDate, log = readCheckinForm(d), sc = scoreLog(log), info = dayInfo(d);
+  const exam = info.type === 'exam';
+  const cr = credit(log);
+  el.innerHTML = `<div class="card"><h2>Learning quality preview</h2>
+    ${exam && workHours(log) === 0 ? `<div class="big t-muted">Not expected</div><p class="small muted">Exam day. University study: ${r1(num(log.university))}h.</p>` : `
+    <div class="row" style="align-items:baseline"><span class="big t-${pctTone(sc.total)}">${sc.total}</span><span class="muted">/100</span></div>
+    <div class="score-parts mt">${Object.keys(SCORE_MAX).map(k => `<div class="sp"><span>${SCORE_LABEL[k]}</span>${bar(sc.parts[k] / SCORE_MAX[k] * 100, pctTone(sc.parts[k] / SCORE_MAX[k] * 100), null, true)}<span class="v">${sc.parts[k]}/${SCORE_MAX[k]}</span><span class="sp-why">${esc(sc.reasons[k])}</span></div>`).join('')}</div>
+    ${sc.flags.map(f => `<div class="flag mt-s">${esc(f)}</div>`).join('')}`}
+    <div class="divider"></div>
+    <div class="small"><strong>Roadmap credit:</strong> ${TOPIC[log.topicId] ? `${cr} day${cr === 1 ? '' : 's'} toward ${esc(tName(log.topicId))}` : 'none (no roadmap topic selected)'}</div>
+    <p class="tiny muted" style="margin:6px 0 0">Credit comes from “Did I complete today's target?”: yes = 1 day, partially = 0.5. This drives course completion. Skill mastery comes from checks, coding, projects and revision.</p>
+  </div>`;
+}
+
+/* =========================================================
+   15. ROADMAP + ON TRACK + CATCH-UP + REST
+   ========================================================= */
+function viewRoadmap() {
+  const t = today(), h = health(), cu = catchUpOptions(h), rs = restStats(), bo = burnout();
+  const curTopic = cu.topic, curEss = (S().topicState[curTopic] || {}).essentials;
+  const healthCard = `<div class="card">
+    <div class="row between"><h2 style="margin:0">Am I on track?</h2><span class="chip bg-${h.tone}"><span class="dot fill-${h.tone}"></span>${h.label}</span></div>
+    <p class="muted" style="margin:6px 0 14px">${h.behind > 0.4 ? `You are ${h.behind} learning day${h.behind === 1 ? '' : 's'} behind schedule.` : h.behind < -0.4 ? `You are ${Math.abs(h.behind)} learning days ahead of schedule.` : 'You are matching the planned schedule.'} Exam and rest days are excluded. Planned ${r1(h.plannedTotal)} days, completed ${r1(h.actualTotal)}.</p>
+    ${h.rows.length ? `<div class="row small muted" style="gap:16px;margin-bottom:6px"><span><span class="dot fill-muted" style="opacity:.5"></span> Planned by today</span><span><span class="dot fill-green"></span> Actual</span></div>
+    ${h.rows.map(r => `<div class="bar-row"><span class="nm">${esc(tName(r.tid))}</span>${bar(r.actual, r.actual >= r.planned ? 'green' : r.planned - r.actual <= 30 ? 'yellow' : 'red', r.planned)}<span class="v">${r.actual}/${r.planned}%</span></div>`).join('')}` : `<div class="empty small">Planned vs actual progress appears once the roadmap starts on ${fmt(ROADMAP_START, { wd: true })}.</div>`}
+  </div>`;
+
+  const catchCard = h.behind >= 1 ? `<div class="card"><h2>Catch-up options <span class="sub">${cu.n} day${cu.n === 1 ? '' : 's'} to recover</span></h2>
+    <div class="stack" style="gap:12px">
+      <div class="card flat"><h3>Option A: Keep your current pace</h3><p class="small muted" style="margin:0">Finish the learning phase on ${fmt(cu.finish, { wd: true, year: true })} instead of ${fmt(LAST_LEARNING_DAY, { year: true })}. Depth stays intact. Nothing to change.</p></div>
+      <div class="card flat"><h3>Option B: Use an upcoming rest day</h3>${cu.rests.length ? cu.rests.map(r => `<div class="row between mt-s"><span class="small">${fmt(r.date, { wd: true })}${r.converted ? ' · now a study day' : ''}</span>${r.converted ? `<button class="btn sm" data-action="restore-rest" data-date="${r.date}">Restore rest day</button>` : `<button class="btn sm" data-action="use-rest" data-date="${r.date}">Use as study day</button>`}</div>`).join('') : '<p class="small muted" style="margin:0">No rest days in the next 45 days.</p>'}${bo.warn ? '<div class="flag mt-s">Your recent load is high. Resting may be the better choice.</div>' : ''}</div>
+      <div class="card flat"><h3>Option C: Essentials only for ${esc(tName(curTopic))}</h3><p class="small muted" style="margin:0 0 8px">Keep the core 70% of ${esc(tName(curTopic))} tasks and shorten its planned length to ${Math.max(1, Math.ceil(TOPIC[curTopic].days * 0.7))} days. Deeper material moves to revision later.</p><button class="btn sm" data-action="toggle-essentials" data-tid="${curTopic}">${curEss ? 'Restore full topic' : 'Switch to essentials'}</button></div>
+      <p class="tiny muted" style="margin:0">University exam days are never used for catch-up, and nothing heavy is scheduled during exams.</p>
+    </div></div>` : `<div class="card"><h2>Catch-up</h2><p class="small muted" style="margin:0">No catch-up needed. If you fall more than a day behind, options appear here. Exam days are never used for catch-up.</p></div>`;
+
+  const restCard = `<div class="card"><h2>Rest</h2><div class="kv"><div><div class="k">Planned rest days so far</div><div class="v">${rs.planned}</div></div><div><div class="k">Rest days taken</div><div class="v">${rs.taken}</div></div><div><div class="k">Days since a real break</div><div class="v">${bo.sinceRest}</div></div></div>
+    <p class="small muted" style="margin:10px 0 0">Rest days count toward your streak and consistency.</p>${bo.warn ? `<div class="flag mt-s">You've been pushing hard for several days. Consider taking a rest day.</div>` : ''}</div>`;
+
+  const phases = PHASES.map(ph => {
+    const segs = SEGMENTS.filter(s => s[0] >= ph.start && s[0] <= ph.end);
+    return `<div class="phase"><div class="phase-head"><h2>${ph.name}</h2><span class="muted small">${ph.desc} · ${fmt(ph.start)} to ${fmt(ph.end === '2027-05-31' ? '2027-02-14' : ph.end)}${ph.id === 3 ? ' onward' : ''}</span></div><div class="tl">
+      ${segs.map(([s, e, type, tid, label]) => {
+        const now = t >= s && t <= e, dates = s === e ? fmt(s, { wd: true }) : `${fmt(s)} – ${fmt(e)}`;
+        if (type === 'exam') return `<div class="tl-item exam ${now ? 'now' : ''}"><span class="date">${dates}</span><span class="nm t-red">UNIVERSITY EXAMS</span><span class="small muted">${diffDays(s, e) + 1} days, protected</span><span class="st">${chip('Protected', 'red')}</span></div>`;
+        if (type !== 'learn') return `<div class="tl-item ${now ? 'now' : ''}"><span class="date">${dates}</span><span class="nm">${esc(label || TYPE_LABEL[type])}</span><span class="small muted">${type === 'rest' ? (S().overrides[s] ? 'Converted to study day' : 'Planned rest') : 'Apply what you learned'}</span><span class="st">${chip(TYPE_LABEL[type], TYPE_TONE[type])}</span></div>`;
+        const m = topicMetrics(tid);
+        return `<div class="tl-item click ${now ? 'now' : ''}" data-action="goto-skill" data-tid="${tid}"><span class="date">${dates}</span><span class="nm"><span class="cat-stripe fill-${catTone(tid)}"></span>${esc(label || TOPIC[tid].name)} <span class="muted small">· ${TOPIC[tid].days}d</span></span>
+          <div class="dual"><div class="lbl"><span>Course ${m.course}%</span><span>Mastery ${m.mastery}%</span></div>${bar(m.course, 'blue', null, true)}${bar(m.mastery, m.started ? pctTone(m.mastery) : 'muted', null, true)}</div>
+          <span class="st">${chip(m.status, STATUS_TONE[m.status])}</span></div>`;
+      }).join('')}</div></div>`;
+  }).join('');
+
+  return `${pageHead('Roadmap', 'Backend + AI/ML + Generative AI + Agentic AI. Course completion (blue) and skill mastery are tracked separately.')}
+    <div class="stack view-enter"><div class="grid g-main">${healthCard}<div class="stack">${catchCard}${restCard}</div></div>
+    <div class="card" style="background:transparent;border:0;padding:8px 0 0">${phases}</div></div>`;
+}
+
+/* =========================================================
+   16. CALENDAR
+   ========================================================= */
+function viewCalendar() {
+  const t = today();
+  if (!UI.calMonth) UI.calMonth = (t < ROADMAP_START ? ROADMAP_START : t).slice(0, 7);
+  const [y, m] = UI.calMonth.split('-').map(Number);
+  const first = `${UI.calMonth}-01`, start = weekStart(first);
+  const cells = [];
+  for (let i = 0; i < 42; i++) {
+    const d = addDays(start, i);
+    if (i >= 35 && d.slice(0, 7) !== UI.calMonth) break;
+    const info = dayInfo(d), st = dayStatus(d), inMonth = d.slice(0, 7) === UI.calMonth;
+    const revDue = S().revisions.some(r => r.due === d && !r.done), revDone = S().revisions.some(r => r.doneOn === d);
+    const lab = info.type === 'learn' ? `${tName(info.topicId)}${info.dayIdx ? ` ${info.dayIdx}/${info.dayCount}` : ''}` : info.type === 'exam' ? 'Exams' : info.type === 'pre' ? '' : info.label || TYPE_LABEL[info.type];
+    const stDot = { completed: 'green', partial: 'yellow', missed: 'red', 'exam-logged': 'blue', 'rest-taken': 'muted' }[st];
+    const stripe = info.type === 'learn' ? catTone(info.topicId) : TYPE_TONE[info.type];
+    cells.push(`<button class="cal-d ${inMonth ? '' : 'out'} ${d === t ? 'is-today' : ''} ${info.type === 'exam' ? 'exam' : info.type === 'rest' ? 'rest' : ''}" data-action="open-day" data-date="${d}" aria-label="${fmt(d, { wd: true, year: true })}">
+      <span class="n"><span>${fromISO(d).getDate()}</span>${stDot ? `<span class="dot fill-${stDot}"></span>` : ''}</span>
+      <span class="lab">${esc(lab)}</span>
+      <span class="cal-icons">${revDue ? chip('Revision', 'blue') : ''}${revDone ? chip('Revised', 'green') : ''}</span>
+      ${info.type !== 'pre' ? `<span class="stripe fill-${stripe}"></span>` : ''}</button>`);
+  }
+  return `${pageHead('Calendar', 'Click any date to see its plan, what you logged and revisions due.',
+      `<button class="btn" data-action="cal-prev" aria-label="Previous month">‹</button><span style="min-width:140px;text-align:center;font-weight:600">${MONTHS[m - 1]} ${y}</span><button class="btn" data-action="cal-next" aria-label="Next month">›</button><button class="btn" data-action="cal-today">Today</button>`)}
+    <div class="card view-enter">
+      <div class="legend mb"><span><span class="dot fill-teal"></span>Backend learning</span><span><span class="dot fill-purple"></span>AI learning</span><span><span class="dot fill-blue"></span>Project</span><span><span class="dot fill-muted"></span>Rest</span><span><span class="dot fill-red"></span>Exams (bar) · Missed (dot)</span><span><span class="dot fill-green"></span>Completed</span><span><span class="dot fill-yellow"></span>Partial</span></div>
+      <div class="cal">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(x => `<div class="cal-h">${x}</div>`).join('')}${cells.join('')}</div>
+    </div>`;
+}
+function dayModal(d) {
+  const info = dayInfo(d), log = S().logs[d], sc = scoreLog(log), st = dayStatus(d);
+  const checked = S().taskChecks[d] || {};
+  const revs = S().revisions.filter(r => r.due === d || r.doneOn === d);
+  const stLabel = { completed: ['Completed', 'green'], partial: ['Partial', 'yellow'], missed: ['Missed', 'red'], rest: ['Rest', 'muted'], 'rest-taken': ['Rest taken', 'muted'], exam: ['Protected', 'red'], 'exam-logged': ['University logged', 'blue'], future: ['Upcoming', 'muted'], pending: ['Not checked in', 'muted'], pre: ['Before start', 'muted'] }[st];
+  const base = BASE_DAYS[d];
+  return `<div class="modal-head"><div><div class="small muted">${fmt(d, { wd: true, long: true, year: true })}</div><h2>${info.type === 'learn' ? esc(tName(info.topicId)) + (info.dayIdx ? ` · Day ${info.dayIdx}/${info.dayCount}` : '') : info.type === 'exam' ? 'UNIVERSITY EXAMS' : esc(info.label || TYPE_LABEL[info.type])}</h2></div><button class="x" data-action="close-modal" aria-label="Close">×</button></div>
+    <div class="row mb">${chip(TYPE_LABEL[info.type], info.type === 'learn' ? catTone(info.topicId) : TYPE_TONE[info.type])}${chip(stLabel[0], stLabel[1])}${sc && workHours(log) > 0 ? chip(`Quality ${sc.total}/100`, pctTone(sc.total)) : ''}</div>
+    <h3>Planned</h3><ul class="checks">${plannedTasks(d).map(x => `<li class="${checked[x] ? 'done' : ''}"><span class="dot fill-${checked[x] ? 'green' : 'muted'}" style="margin-top:8px"></span><span>${esc(x)}</span></li>`).join('')}</ul>
+    ${log ? `<div class="divider"></div><h3>Logged</h3><div class="kv">${[['Study', log.study], ['Coding', log.coding], ['Project', log.project], ['Revision', log.revision], ['University', log.university], ['Rest', log.rest]].map(([k, v]) => `<div><div class="k">${k}</div><div class="v" style="font-size:16px">${r1(num(v))}h</div></div>`).join('')}</div>
+      ${log.built ? `<p class="small"><strong>Built:</strong> ${esc(log.built)}</p>` : ''}${log.learned ? `<p class="small"><strong>Learned:</strong> ${esc(log.learned)}</p>` : ''}${log.struggled ? `<p class="small"><strong>Struggled:</strong> ${esc(log.struggled)}</p>` : ''}${log.uniNotes ? `<p class="small"><strong>University:</strong> ${esc(log.uniNotes)}</p>` : ''}` : ''}
+    ${revs.length ? `<div class="divider"></div><h3>Revision</h3>${revs.map(r => `<div class="row between small" style="padding:4px 0"><span>${esc(tName(r.topicId))} · ${r.interval === 'retry' ? 're-check' : r.interval + '-day'}</span>${r.done ? chip(`Retention ${r.score}%`, pctTone(r.score)) : `<button class="btn sm" data-action="open-revision" data-id="${r.id}">Start</button>`}</div>`).join('')}` : ''}
+    <div class="divider"></div>
+    <div class="row">${d <= today() || info.type !== 'pre' ? `<a class="btn primary" href="#checkin/${d}" data-action="close-modal-nav">${log ? 'Edit check-in' : 'Check in for this date'}</a>` : ''}
+    ${base && base.type === 'rest' && d >= today() ? (S().overrides[d] ? `<button class="btn" data-action="restore-rest" data-date="${d}">Restore rest day</button>` : `<button class="btn" data-action="use-rest" data-date="${d}">Use as study day</button>`) : ''}</div>`;
+}
+/* =========================================================
+   17. SKILLS: matrix + portfolio value
+   ========================================================= */
+function missingFor(m) {
+  const out = [], n = tName(m.tid);
+  if (!m.started) return [`Not started yet. Planned for ${TOPIC[m.tid].days} day${TOPIC[m.tid].days > 1 ? 's' : ''}.`];
+  if (!m.last) out.push('No capability check yet. Take one to measure real understanding.');
+  if ((m.understanding || 0) < 7) out.push(`Explain the core concepts of ${n} from memory, then retake the concept check.`);
+  if ((m.practical || 0) < 7) out.push(`Build something with ${n} without a tutorial (target ${effDays(m.tid) * (num(S().settings.codingTarget) || 2)}h of your own coding on it).`);
+  if ((m.projectUsage || 0) < 5) out.push(m.projs.length ? `Use ${n} in ${m.projs[0].name}; its milestones are ${projectProgress(m.projs[0])}% done.` : `No project uses ${n} yet. Add it to a project's stack and build a feature with it.`);
+  if (m.portfolio < 5) out.push(`Portfolio evidence is thin: a public repo, README and deployment that show ${n} in use.`);
+  if (m.retention === null) out.push('Retention untested. Spaced revision starts once the course or topic is marked complete.');
+  else if (m.retention < 6) out.push(`Retention is ${r1(m.retention)}/10. Revisit before it fades further.`);
+  return out.length ? out : ['Nothing major missing. Keep revising on schedule.'];
+}
+
+function viewSkills() {
+  const f = UI.skillFilter;
+  const list = TOPICS.filter(t => f === 'all' || (f === 'backend' ? t.cat === 'backend' : t.cat !== 'backend'));
+  const sel = UI.skillSel && TOPIC[UI.skillSel] ? UI.skillSel : currentTopic();
+  const rows = list.map(t => {
+    const m = topicMetrics(t.id);
+    return `<tr class="click ${t.id === sel ? 'sel' : ''}" data-action="sel-skill" data-tid="${t.id}">
+      <td><span class="cat-stripe fill-${catTone(t.id)}"></span>${esc(tName(t.id))}</td><td>${t.days} day${t.days > 1 ? 's' : ''}</td>
+      <td>${miniBar(m.course / 10, 'blue')}${m.course}%</td>
+      <td>${miniBar(m.mastery / 10, m.started ? pctTone(m.mastery) : 'muted')}<strong>${m.mastery}%</strong></td>
+      <td class="t-${tenTone(m.understanding)}">${fmtTen(m.understanding)}</td><td class="t-${tenTone(m.practical)}">${fmtTen(m.practical)}</td>
+      <td class="t-${tenTone(m.projectUsage)}">${fmtTen(m.projectUsage)}</td><td class="t-${tenTone(m.retention)}">${fmtTen(m.retention)}</td>
+      <td>${chip(m.status, STATUS_TONE[m.status])}</td><td>${m.decision ? chip(m.decision, DECISION_TONE[m.decision]) : '<span class="faint">—</span>'}</td></tr>`;
+  }).join('');
+
+  const m = topicMetrics(sel), gate = completionGate(sel), t = TOPIC[sel];
+  const pv = [['Concept knowledge', m.understanding], ['Practical ability', m.practical], ['Project application', m.projectUsage], ['Portfolio evidence', m.started ? m.portfolio : null]];
+  const detail = `<div class="card">
+    <div class="row between"><div><div class="small muted">${t.cat === 'backend' ? 'Backend' : t.cat === 'genai' ? 'Generative AI' : 'Advanced AI'} · ${t.days} planned day${t.days > 1 ? 's' : ''}</div><div class="mid">${esc(t.name)}</div></div>${chip(m.status, STATUS_TONE[m.status])}</div>
+    <div class="versus mt"><div><div class="vs-num">${m.course}%</div><div class="vs-lab">Course completion: “I completed the course”</div></div><div><div class="vs-num t-${m.started ? pctTone(m.mastery) : 'muted'}">${m.mastery}%</div><div class="vs-lab">Skill mastery: “I can actually use it”</div></div></div>
+    ${m.retention === null && m.started ? '<p class="tiny muted" style="margin:6px 0 0">Mastery is capped at 85% until retention is tested through spaced revision.</p>' : ''}
+    <div class="divider"></div>
+    <h3>Skill value</h3>
+    <div class="evidence">${pv.map(([k, v]) => `<div class="ev"><div class="small muted">${k}</div><div style="font-weight:600" class="t-${LEVEL_TONE[level(v)]}">${level(v)}</div></div>`).join('')}</div>
+    <div class="row mt-s small"><span class="muted">Job relevance</span>${chip(t.rel, t.rel === 'High' ? 'blue' : 'muted')}<span class="muted">· ${r1(m.hours.study)}h study, ${r1(m.hours.coding)}h coding, ${r1(m.hours.project)}h project logged</span></div>
+    <p class="tiny muted" style="margin:8px 0 0">This is not a job-readiness score. It shows what evidence you have and what is still missing.</p>
+    <div class="divider"></div>
+    <h3>What's missing</h3><ul style="margin:0;padding-left:18px" class="small">${missingFor(m).map(x => `<li style="padding:2px 0">${esc(x)}</li>`).join('')}</ul>
+    <div class="divider"></div>
+    <div class="row">
+      <button class="btn primary" data-action="open-check" data-tid="${sel}">Take capability check</button>
+      <button class="btn" data-action="course-done" data-tid="${sel}">${m.ts.courseDone ? 'Undo course completed' : 'Mark course completed'}</button>
+      <button class="btn" data-action="complete-topic" data-tid="${sel}" ${gate.ok || m.completed ? '' : 'disabled'}>${m.completed ? 'Reopen topic' : 'Mark topic mastered'}</button>
+    </div>
+    ${!gate.ok && !m.completed ? `<div class="flag mt-s"><strong>Can't mark as mastered yet.</strong> ${gate.why.map(esc).join(' ')}</div>` : ''}
+    ${m.completed ? `<div class="flag green mt-s">Mastered on ${fmt(m.ts.completedOn, { year: true })}. Revision checkpoints are scheduled.</div>` : ''}
+    ${m.checks.length ? `<div class="divider"></div><h3>Check history</h3>${m.checks.slice().reverse().slice(0, 5).map(c => `<div class="row between small" style="padding:4px 0"><span>${fmt(c.date, { year: true })}</span><span class="muted">Concept ${c.concept} · Practical ${c.practical} · Recall ${c.recall} · Build ${c.build}</span>${chip(c.decision, DECISION_TONE[c.decision])}</div>`).join('')}` : ''}
+  </div>`;
+
+  return `${pageHead('Skills', 'If course completion is high and mastery is low, you are finishing courses without becoming capable. This page makes that visible.',
+      `<div class="seg">${[['all', 'All'], ['backend', 'Backend'], ['ai', 'AI']].map(([v, l]) => `<button data-action="skill-filter" data-val="${v}" class="${f === v ? 'on' : ''}">${l}</button>`).join('')}</div>`)}
+    <div class="stack view-enter">
+      <div class="card"><h2>Skill matrix</h2><div class="table-wrap"><table class="t"><thead><tr><th>Technology</th><th>Planned</th><th>Course</th><th>Mastery</th><th>Understanding</th><th>Practical</th><th>Project usage</th><th>Retention</th><th>Status</th><th>Last check</th></tr></thead><tbody>${rows}</tbody></table></div></div>
+      <div id="skillDetail">${detail}</div>
+    </div>`;
+}
+
+/* =========================================================
+   18. PROJECTS
+   ========================================================= */
+function viewProjects() {
+  const cards = S().projects.map(p => {
+    const prog = projectProgress(p);
+    return `<div class="card">
+      <input class="in" style="font-size:18px;font-weight:650;border-color:transparent;padding:2px 0;background:transparent" value="${esc(p.name)}" data-change="proj-field" data-id="${p.id}" data-field="name" aria-label="Project name">
+      <textarea class="in small" rows="2" style="border-color:transparent;padding:2px 0;min-height:44px;background:transparent;color:var(--muted)" data-change="proj-field" data-id="${p.id}" data-field="goal" aria-label="Project goal">${esc(p.goal)}</textarea>
+      <div class="row mt-s" style="gap:14px;flex-wrap:nowrap"><span class="mid" style="min-width:52px">${prog}%</span><div style="flex:1">${bar(prog, pctTone(prog))}</div></div>
+      <div class="tiny muted mt-s">${p.milestones.filter(m => m.done).length}/${p.milestones.length} milestones${p.target ? ` · target ${fmt(p.target, { year: true })}` : ''}</div>
+      <div class="row mt-s" style="gap:6px">${p.stack.map(id => chip(tName(id), catTone(id))).join('')}${(p.extra || []).map(x => chip(x, 'muted')).join('')}</div>
+      <div class="divider"></div>
+      <div class="proj-ms">${p.milestones.map((m, i) => `<label class="${m.done ? 'done' : ''}"><input type="checkbox" class="cb" data-change="ms-toggle" data-id="${p.id}" data-i="${i}" ${m.done ? 'checked' : ''}>${esc(m.name)}</label>`).join('')}</div>
+      <div class="divider"></div>
+      <h3>Evidence</h3>
+      <div class="grid g-2"><label class="f">GitHub repository<input class="in" placeholder="https://github.com/…" value="${esc(p.repo)}" data-change="proj-field" data-id="${p.id}" data-field="repo"></label><label class="f">Demo<input class="in" placeholder="Live URL or video link" value="${esc(p.demo)}" data-change="proj-field" data-id="${p.id}" data-field="demo"></label></div>
+      <div class="evidence mt-s">
+        <div class="ev ${p.repo ? 'ok' : ''}">Repository<br><strong>${p.repo ? 'Linked' : 'Missing'}</strong></div>
+        <div class="ev ${p.demo ? 'ok' : ''}">Demo<br><strong>${p.demo ? 'Linked' : 'Missing'}</strong></div>
+        <label class="ev ${p.readme ? 'ok' : ''}" style="cursor:pointer"><span class="row" style="gap:8px"><input type="checkbox" class="cb" data-change="proj-bool" data-id="${p.id}" data-field="readme" ${p.readme ? 'checked' : ''}>README completed</span></label>
+        <label class="ev ${p.deployed ? 'ok' : ''}" style="cursor:pointer"><span class="row" style="gap:8px"><input type="checkbox" class="cb" data-change="proj-bool" data-id="${p.id}" data-field="deployed" ${p.deployed ? 'checked' : ''}>Deployed</span></label>
+      </div>
+      <div class="row mt"><button class="btn sm" data-action="edit-project" data-id="${p.id}">Edit stack and milestones</button><button class="btn sm danger" data-action="delete-project" data-id="${p.id}">Delete project</button></div>
+    </div>`;
+  }).join('');
+  const done = S().projects.filter(p => projectProgress(p) === 100).length;
+  return `${pageHead('Projects', `Projects are where topics turn into evidence. ${done}/${S().projects.length} complete. Project progress feeds each topic's project usage and portfolio score.`, `<button class="btn primary" data-action="new-project">Add project</button>`)}
+    <div class="grid g-2 view-enter">${cards || '<div class="empty">No projects yet. Add one to start turning topics into evidence.</div>'}</div>`;
+}
+function projectForm(p) {
+  p = p || { id: '', name: '', goal: '', stack: [], extra: [], milestones: [], target: '' };
+  return `<div class="modal-head"><h2>${p.id ? 'Edit project' : 'Add project'}</h2><button class="x" data-action="close-modal" aria-label="Close">×</button></div>
+    <div class="stack" id="projForm" data-id="${p.id}">
+      <label class="f">Name<input class="in" name="name" value="${esc(p.name)}" placeholder="e.g. URL shortener with analytics"></label>
+      <label class="f">Goal<textarea class="in" name="goal" placeholder="What does it prove you can do?">${esc(p.goal)}</textarea></label>
+      <label class="f">Target date<input class="in" type="date" name="target" value="${p.target || ''}"></label>
+      <div class="f"><span class="small muted" style="font-weight:500">Roadmap technologies used</span><div class="row mt-s" style="gap:6px">${TOPICS.map(t => `<label class="chip ${p.stack.includes(t.id) ? 'bg-' + catTone(t.id) : 'bg-muted'}" style="cursor:pointer"><input type="checkbox" name="stack" value="${t.id}" ${p.stack.includes(t.id) ? 'checked' : ''} style="display:none" data-change="chip-toggle" data-tone="${catTone(t.id)}">${esc(tName(t.id))}</label>`).join('')}</div></div>
+      <label class="f">Other technologies (comma separated)<input class="in" name="extra" value="${esc((p.extra || []).join(', '))}" placeholder="Docker, Stripe"></label>
+      <label class="f">Milestones (one per line)<textarea class="in" name="milestones" style="min-height:140px" placeholder="Planning&#10;Architecture&#10;Database">${esc(p.milestones.map(m => m.name).join('\n'))}</textarea></label>
+      <div class="row"><button class="btn primary" data-action="save-project">${p.id ? 'Save changes' : 'Add project'}</button><button class="btn" data-action="close-modal">Cancel</button></div>
+    </div>`;
+}
+
+/* =========================================================
+   19. REVISION (spaced retention)
+   ========================================================= */
+function viewRevision() {
+  const t = today(), all = S().revisions;
+  const due = all.filter(r => !r.done && r.due <= t).sort((a, b) => a.due.localeCompare(b.due));
+  const up = all.filter(r => !r.done && r.due > t).sort((a, b) => a.due.localeCompare(b.due));
+  const done = all.filter(r => r.done).sort((a, b) => b.doneOn.localeCompare(a.doneOn));
+  const tab = UI.revTab;
+  const listFor = tab === 'due' ? due : tab === 'up' ? up : done;
+  const row = r => `<tr><td><span class="cat-stripe fill-${catTone(r.topicId)}"></span>${esc(tName(r.topicId))}</td><td>${r.interval === 'retry' ? 'Re-check' : r.interval + ' day' + (r.interval > 1 ? 's' : '') + ' later'}</td><td>${fmt(r.due, { wd: true })}${r.moved ? ' <span class="tiny muted">(moved past exams)</span>' : ''}${!r.done && r.due < t ? ' ' + chip('Overdue', 'yellow') : ''}</td><td>${r.done ? chip(`${r.score}%`, pctTone(r.score)) : ''}</td><td style="text-align:right">${r.done ? `<span class="tiny muted">${fmt(r.doneOn)}</span>` : `<button class="btn sm ${r.due <= t ? 'primary' : ''}" data-action="open-revision" data-id="${r.id}">${r.due <= t ? 'Start revision' : 'Revise early'}</button>`}</td></tr>`;
+  const retRows = TOPICS.map(tp => topicMetrics(tp.id)).filter(m => m.revs.length);
+  return `${pageHead('Revision', 'After a topic is completed, checkpoints are created 1, 3, 7, 14 and 30 days later. Each asks you to explain, code, solve and build without notes. Checkpoints never land on exam days.')}
+    <div class="grid g-main view-enter">
+      <div class="card"><div class="row between mb"><div class="seg">${[['due', `Due (${due.length})`], ['up', `Upcoming (${up.length})`], ['done', `Completed (${done.length})`]].map(([v, l]) => `<button data-action="rev-tab" data-val="${v}" class="${tab === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+        ${listFor.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Topic</th><th>Checkpoint</th><th>Due</th><th>Result</th><th></th></tr></thead><tbody>${listFor.map(row).join('')}</tbody></table></div>` : `<div class="empty small">${tab === 'due' ? 'Nothing due. ' : ''}${all.length ? '' : 'Checkpoints appear after you mark a course completed or a topic mastered on the Skills page.'}</div>`}
+      </div>
+      <div class="card"><h2>Retention by topic</h2>${retRows.length ? retRows.map(m => `<div class="bar-row"><span class="nm">${esc(tName(m.tid))}</span>${bar(m.retention * 10, pctTone(m.retention * 10))}<span class="v">${Math.round(m.retention * 10)}%</span></div>`).join('') : '<div class="empty small">No revisions completed yet.</div>'}
+      <p class="tiny muted" style="margin:10px 0 0">A result under 50% schedules an extra re-check two days later.</p></div>
+    </div>`;
+}
+function revisionModal(id) {
+  const r = S().revisions.find(x => x.id === id); if (!r) return '';
+  const items = [['explain', 'Explain the concept', `Explain ${TOPIC[r.topicId].k} out loud or in writing, without notes.`], ['code', 'Write code', `Write a short ${tName(r.topicId)} snippet from memory.`], ['problem', 'Solve a small problem', 'Pick one small problem and solve it without looking anything up.'], ['build', 'Build without notes', `Build something tiny with ${tName(r.topicId)}, notes closed.`]];
+  return `<div class="modal-head"><div><div class="small muted">${r.interval === 'retry' ? 'Re-check' : r.interval + '-day'} revision · due ${fmt(r.due, { wd: true })}</div><h2>${esc(tName(r.topicId))}</h2></div><button class="x" data-action="close-modal" aria-label="Close">×</button></div>
+    <div id="revForm" data-id="${r.id}">${items.map(([k, title, desc]) => `<div class="q-block"><div class="q-kind">${title}</div><div class="q-text">${esc(desc)}</div><div class="seg" data-name="${k}">${[['yes', 'Did it'], ['partly', 'Partly'], ['no', 'Could not']].map(([v, l]) => `<button type="button" data-action="seg" data-val="${v}">${l}</button>`).join('')}</div></div>`).join('')}
+    <label class="f mt">Notes<textarea class="in" name="notes" placeholder="What did you forget?"></textarea></label>
+    <div class="row mt"><button class="btn primary" data-action="save-revision">Save revision</button><button class="btn" data-action="close-modal">Cancel</button></div></div>`;
+}
+function checkModal(tid) {
+  const qs = checkQuestions(tid);
+  return `<div class="modal-head"><div><div class="small muted">Am I actually learning?</div><h2>${esc(tName(tid))} capability check</h2></div><button class="x" data-action="close-modal" aria-label="Close">×</button></div>
+    <p class="small muted" style="margin-top:0">Answer as if someone asked you in an interview tomorrow. There's no penalty for “No”. It only changes what you do next.</p>
+    <div id="checkForm" data-tid="${tid}">${qs.map(q => `<div class="q-block"><div class="q-kind">${q.kind}</div><div class="q-text">${esc(q.q)}</div><div class="seg" data-name="${q.key}">${q.opts.map(([v, l]) => `<button type="button" data-action="seg" data-val="${v}">${l}</button>`).join('')}</div></div>`).join('')}
+    <div id="checkResult"></div>
+    <div class="row mt"><button class="btn primary" data-action="save-check">Save answers</button><button class="btn" data-action="close-modal">Cancel</button></div></div>`;
+}
+const DECISION_TEXT = {
+  'Continue': 'Your understanding and practical ability both look solid. Move on, and your revision checkpoints will test retention.',
+  'Revise': 'You can do some of it, but the concepts are not solid. Re-explain them in your own notes and retake this check before moving on.',
+  'Practice More': 'You understand it, but can’t yet use it on your own. Spend your next sessions coding without a tutorial.',
+  'Repeat Topic': 'Understanding and practice are both weak. Give this topic another pass, focusing on the essentials, before moving on.',
+};
+
+/* =========================================================
+   20. WEEKLY REVIEW
+   ========================================================= */
+const WEEK_QS = ['What did I learn?', 'What did I build?', 'What was difficult?', 'What do I need to revise?', 'Am I moving too fast?', 'Am I moving too slowly?', 'What should I change next week?'];
+function viewWeekly() {
+  const t = today();
+  if (!UI.week) { const ws = weekStart(t); UI.week = fromISO(t).getDay() === 0 ? ws : (ws > ROADMAP_START ? addDays(ws, -7) : ws); }
+  const ws = UI.week, we = addDays(ws, 6), st = periodStats(ws, we), ans = S().weekly[ws] || {};
+  const h = health();
+  const touched = Object.keys(st.byTopic).map(topicMetrics);
+  const fastHint = touched.some(m => m.course - m.mastery > 30) ? 'Data hint: course completion is running well ahead of mastery on topics this week.' : 'Data hint: completion and mastery are roughly aligned.';
+  const slowHint = h.behind > 2 ? `Data hint: you are ${h.behind} learning days behind overall.` : 'Data hint: pace matches the plan.';
+  const hints = { 4: fastHint, 5: slowHint };
+  const recs = weeklyRecommendation(ws);
+  const tot = st.study + st.coding + st.project + st.revision;
+  const pastReviews = Object.keys(S().weekly).length;
+  return `${pageHead('Weekly review', `Week of ${fmt(ws, { year: true })} to ${fmt(we)}. Created every Sunday from what you logged.`,
+      `<button class="btn" data-action="week-prev" aria-label="Previous week">‹</button><button class="btn" data-action="week-next" aria-label="Next week">›</button><button class="btn" data-action="week-now">This week</button>`)}
+    <div class="stack view-enter">
+      <div class="card"><h2>This week</h2><div class="kv">
+        ${[['Study hours', r1(st.study) + 'h'], ['Coding', r1(st.coding) + 'h'], ['Projects', r1(st.project) + 'h'], ['University', r1(st.university) + 'h'], ['Topics completed', st.topicsDone], ['Average learning score', st.avgScore === null ? '—' : st.avgScore + '/100'], ['Consistency', `${st.consistent}/${st.expected} days`]].map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join('')}
+      </div>${st.protected ? `<p class="small muted" style="margin:10px 0 0">${st.protected} exam day${st.protected > 1 ? 's' : ''} this week were protected and excluded from consistency.</p>` : ''}
+      ${tot > 0 ? `<p class="small" style="margin:10px 0 0">Active share (coding + project): <strong>${Math.round((st.coding + st.project) / tot * 100)}%</strong> of technical time.</p>` : ''}
+      <div class="mt">${stackedBars(weekDays(ws), SERIES, 170)}</div></div>
+      <div class="grid g-main">
+        <div class="card"><h2>Questions</h2><div class="stack" id="weekForm" data-ws="${ws}" style="gap:12px">${WEEK_QS.map((q, i) => `<label class="f">${i + 1}. ${q}${hints[i] ? `<span class="tiny faint">${hints[i]}</span>` : ''}<textarea class="in" name="q${i}">${esc(ans['q' + i] || '')}</textarea></label>`).join('')}
+          <div><button class="btn primary" data-action="save-week">Save weekly review</button></div></div></div>
+        <div class="card"><h2>Next week recommendation</h2><div class="stack" style="gap:8px">${recs.map(r => `<div class="flag blue">${esc(r)}</div>`).join('')}</div>
+          <p class="tiny muted" style="margin:10px 0 0">${pastReviews} weekly review${pastReviews === 1 ? '' : 's'} saved.</p></div>
+      </div>
+    </div>`;
+}
+
+/* =========================================================
+   21. MONTHLY REVIEW
+   ========================================================= */
+function viewMonthly() {
+  const t = today();
+  if (!UI.month) UI.month = (t < ROADMAP_START ? ROADMAP_START : t).slice(0, 7);
+  const [y, mo] = UI.month.split('-').map(Number);
+  const a = monthlyAnalysis(UI.month), st = a.st;
+  const all = overallCompletion(), be = overallCompletion(x => x.cat === 'backend'), ai = overallCompletion(x => x.cat !== 'backend');
+  const projDone = S().projects.filter(p => projectProgress(p) === 100).length;
+  const list = (ids, empty) => ids.length ? ids.map(id => chip(tName(id), catTone(id))).join(' ') : `<span class="small muted">${empty}</span>`;
+  const notes = S().monthly[UI.month] || '';
+  const stat = (k, course, mastery) => `<div><div class="k">${k}</div><div class="v">${course}%</div><div class="tiny muted">mastery ${mastery}%</div></div>`;
+  return `${pageHead('Monthly review', `${MONTHS[mo - 1]} ${y}. An honest assessment from logged data, not encouragement.`,
+      `<button class="btn" data-action="month-prev" aria-label="Previous month">‹</button><span style="min-width:130px;text-align:center;font-weight:600">${MONTHS[mo - 1]} ${y}</span><button class="btn" data-action="month-next" aria-label="Next month">›</button>`)}
+    <div class="stack view-enter">
+      <div class="card"><h2>Progress</h2><div class="kv">
+        ${stat('Roadmap completion', all.course, all.mastery)}${stat('Backend completion', be.course, be.mastery)}${stat('AI completion', ai.course, ai.mastery)}
+        <div><div class="k">Projects</div><div class="v">${projDone}/${S().projects.length}</div></div>
+        <div><div class="k">Average learning quality</div><div class="v">${st.avgScore === null ? '—' : st.avgScore + '%'}</div><div class="tiny muted">this month</div></div>
+        <div><div class="k">Hours this month</div><div class="v">${r1(st.study + st.coding + st.project + st.revision)}h</div><div class="tiny muted">+ ${r1(st.university)}h university</div></div>
+      </div></div>
+      <div class="card"><h2>Is this roadmap still worth following?</h2>
+        <p style="margin:0 0 14px;max-width:75ch;font-size:16px">${esc(a.verdict)}</p>
+        ${st.logged >= 5 ? `<div class="grid g-2">
+          <div class="card flat"><h3>Skills becoming strong</h3>${list(a.strong, 'None yet reach “Strong”.')}</div>
+          <div class="card flat"><h3>Weak skills</h3>${list(a.weak, 'No weak skills flagged.')}</div>
+          <div class="card flat"><h3>Learning but not using</h3>${list(a.unused, 'Everything learned is being applied.')}</div>
+          <div class="card flat"><h3>Topics needing more time</h3>${list(a.needTime, 'No topic is far behind its plan.')}</div>
+          <div class="card flat"><h3>Time on low-value topics</h3><p class="small" style="margin:0">${esc(a.lowValue)}</p></div>
+          <div class="card flat"><h3>More projects?</h3><p class="small" style="margin:0">${esc(a.projects)}</p></div>
+          <div class="card flat"><h3>Should I slow down?</h3><p class="small" style="margin:0">${esc(a.slow)}</p></div>
+          <div class="card flat"><h3>Should I revise previous topics?</h3><p class="small" style="margin:0">${esc(a.revise)}</p></div>
+        </div>` : ''}
+      </div>
+      <div class="card"><h2>My notes for this month</h2><textarea class="in" id="monthNotes" style="min-height:110px" placeholder="What will you change next month?">${esc(notes)}</textarea><div class="mt-s"><button class="btn primary" data-action="save-month">Save notes</button></div></div>
+    </div>`;
+}
+
+/* =========================================================
+   22. ANALYTICS
+   ========================================================= */
+function viewAnalytics() {
+  const t = today();
+  const pts = []; for (let i = 29; i >= 0; i--) { const d = addDays(t, -i), l = S().logs[d]; pts.push({ label: fmt(d), value: l && workHours(l) > 0 ? scoreLog(l).total : null }); }
+  const started = TOPICS.map(x => topicMetrics(x.id)).filter(m => m.started);
+  const all = periodStats(ROADMAP_START, t);
+  const tot = all.study + all.coding + all.project + all.revision;
+  const comp = {}; Object.keys(SCORE_MAX).forEach(k => comp[k] = []);
+  Object.values(S().logs).forEach(l => { if (workHours(l) > 0) { const s = scoreLog(l); for (const k in comp) comp[k].push(s.parts[k] / SCORE_MAX[k] * 100); } });
+  const weakest = Object.keys(comp).filter(k => comp[k].length).sort((a, b) => avg(comp[a]) - avg(comp[b]))[0];
+  const rs = restStats();
+  return `${pageHead('Analytics', 'Charts update from your check-ins. Hours are an input; capability is the output.')}
+    <div class="stack view-enter">
+      <div class="grid g-2">
+        <div class="card"><h2>Weekly hours <span class="sub">last 8 weeks</span></h2>${stackedBars(weekGroups(8), SERIES)}</div>
+        <div class="card"><h2>Daily learning quality <span class="sub">last 30 days</span></h2>${lineChart(pts)}</div>
+      </div>
+      <div class="grid g-2">
+        <div class="card"><h2>Course completion vs skill mastery</h2>${started.length ? started.map(m => `<div style="padding:5px 0"><div class="row between small"><span>${esc(tName(m.tid))}</span><span class="muted">${m.course}% course · <strong class="t-${pctTone(m.mastery)}">${m.mastery}% mastery</strong></span></div><div class="dual mt-s">${bar(m.course, 'blue', null, true)}${bar(m.mastery, pctTone(m.mastery), null, true)}</div></div>`).join('') : '<div class="empty small">Appears after your first topic check-in.</div>'}</div>
+        <div class="stack">
+          <div class="card"><h2>Where the time goes <span class="sub">since start</span></h2>${tot > 0 ? SERIES.slice(0, 4).map(s => `<div class="bar-row"><span class="nm">${s.name}</span><div class="bar"><i style="width:${all[s.key] / tot * 100}%;background:${s.color}"></i></div><span class="v">${r1(all[s.key])}h</span></div>`).join('') + `<p class="small" style="margin:10px 0 0">Coding-to-study ratio <strong>${r1(all.coding / Math.max(all.study, 0.1))}</strong>. ${all.coding >= all.study ? 'You write more than you watch.' : 'You watch more than you write.'} University: ${r1(all.university)}h (separate).</p>` : '<div class="empty small">No hours logged yet.</div>'}</div>
+          <div class="card"><h2>Score components <span class="sub">average across days</span></h2>${weakest ? Object.keys(SCORE_MAX).map(k => `<div class="bar-row"><span class="nm">${SCORE_LABEL[k]}</span>${bar(avg(comp[k]) || 0, pctTone(avg(comp[k]) || 0))}<span class="v">${Math.round(avg(comp[k]) || 0)}%</span></div>`).join('') + `<p class="small" style="margin:10px 0 0">Weakest area: <strong>${SCORE_LABEL[weakest]}</strong>.</p>` : '<div class="empty small">No scored days yet.</div>'}</div>
+          <div class="card"><h2>Consistency</h2><div class="kv"><div><div class="k">Days logged</div><div class="v">${all.logged}</div></div><div><div class="k">Consistent days</div><div class="v">${all.consistent}/${all.expected}</div></div><div><div class="k">Rest taken / planned</div><div class="v">${rs.taken}/${rs.planned}</div></div><div><div class="k">Longest streak</div><div class="v">${streaks().longest}</div></div></div></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* =========================================================
+   23. SETTINGS
+   ========================================================= */
+function viewSettings() {
+  const s = S().settings;
+  const logs = Object.keys(S().logs).length;
+  return `${pageHead('Settings')}
+    <div class="grid g-2 view-enter">
+      <div class="card"><h2>Appearance</h2><div class="seg">${[['dark', 'Dark'], ['light', 'Light']].map(([v, l]) => `<button data-action="set-theme" data-val="${v}" class="${s.theme === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+      <div class="card"><h2>Scoring</h2><label class="f">Daily coding target (hours) for full coding points<input class="in" type="number" min="0.5" max="8" step="0.5" value="${s.codingTarget}" data-change="set-target" style="max-width:140px"></label></div>
+      <div class="card"><h2>Preview a date</h2><p class="small muted" style="margin:0 0 10px">Pretend today is another date to see how the dashboard, advisor and exam handling behave. Clear it to return to the real date.</p>
+        <div class="row"><input class="in" type="date" value="${s.dateOverride}" data-change="set-override" style="max-width:200px">${s.dateOverride ? `<button class="btn" data-action="clear-override">Use real date</button>` : ''}</div>
+        ${s.dateOverride ? `<div class="flag mt-s">Previewing ${fmt(s.dateOverride, { wd: true, year: true })}.</div>` : ''}</div>
+      <div class="card"><h2>Your data</h2><p class="small muted" style="margin:0 0 10px">${logs} check-in${logs === 1 ? '' : 's'} stored in this browser (localStorage). The storage layer is isolated so it can later be connected to Supabase.</p>
+        <div class="row"><button class="btn" data-action="export">Export JSON</button><label class="btn" style="cursor:pointer">Import JSON<input type="file" accept="application/json,.json" data-change="import" style="display:none"></label><button class="btn danger" data-action="reset">Reset all data</button></div></div>
+      <div class="card span-2"><h2>How scoring works</h2><div class="small" style="max-width:80ch">
+        <p style="margin-top:0"><strong>Daily learning quality (100):</strong> Understanding 25 (self-rating, reduced if “What I learned” is empty), Coding 30 (hours vs target, halved if not written by you), Practice 20 (tutorial-free work plus what you built), Revision 10, Application 15 (project hours plus applying it).</p>
+        <p><strong>Course completion</strong> comes from target-completed days on a topic. <strong>Skill mastery</strong> combines understanding (30%), practical ability (35%), project usage (20%) and retention (15%). It is capped at 85% until retention is tested.</p>
+        <p style="margin-bottom:0"><strong>Topics can only be marked mastered</strong> when the latest capability check says Continue, understanding is at least 7/10 and practical ability at least 6/10.</p></div></div>
+    </div>`;
+}
+/* =========================================================
+   24. ROUTER, MODALS, ACTIONS
+   ========================================================= */
+const ICON = {
+  dashboard: '<path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/>',
+  roadmap: '<path d="M4 6h16M4 12h10M4 18h13"/><circle cx="18" cy="12" r="2"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  checkin: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9"/>',
+  skills: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  projects: '<path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4M3 17l9 4 9-4"/>',
+  revision: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+  weekly: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 13h3M8 17h8"/>',
+  monthly: '<path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/>',
+  analytics: '<path d="M3 20l5-7 4 3 5-8 4 5"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/>',
+};
+const NAV = [
+  ['Today', [['dashboard', 'Dashboard'], ['checkin', 'Daily check-in'], ['calendar', 'Calendar']]],
+  ['Progress', [['roadmap', 'Roadmap'], ['skills', 'Skills'], ['projects', 'Projects'], ['revision', 'Revision']]],
+  ['Reflect', [['weekly', 'Weekly review'], ['monthly', 'Monthly review'], ['analytics', 'Analytics']]],
+  ['', [['settings', 'Settings']]],
+];
+const VIEWS = { dashboard: viewDashboard, roadmap: viewRoadmap, calendar: viewCalendar, checkin: viewCheckin, skills: viewSkills, projects: viewProjects, revision: viewRevision, weekly: viewWeekly, monthly: viewMonthly, analytics: viewAnalytics, settings: viewSettings };
+
+function renderNav(route) {
+  const dueN = revisionsDue().length;
+  document.getElementById('nav').innerHTML = NAV.map(([g, items]) => `${g ? `<div class="nav-group">${g}</div>` : '<div style="height:10px"></div>'}${items.map(([id, label]) => `<a href="#${id}" class="${route === id ? 'on' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICON[id]}</svg>${label}${id === 'revision' && dueN ? `<span class="chip bg-blue" style="margin-left:auto;padding:0 7px">${dueN}</span>` : ''}</a>`).join('')}`).join('');
+  const t = today(), info = dayInfo(t);
+  document.getElementById('sideFoot').innerHTML = `${fmt(t, { wd: true, year: true })}${S().settings.dateOverride ? ' (preview)' : ''}<br>${info.type === 'exam' ? '<span class="t-red">University exams</span>' : esc(TYPE_LABEL[info.type])}`;
+}
+let lastRoute = null;
+function render() {
+  clearMetricCache();
+  document.documentElement.dataset.theme = S().settings.theme;
+  const [route0, arg] = (location.hash.slice(1) || 'dashboard').split('/');
+  const route = VIEWS[route0] ? route0 : 'dashboard';
+  const keep = route === lastRoute ? window.scrollY : 0;
+  document.getElementById('main').innerHTML = VIEWS[route](arg);
+  renderNav(route);
+  document.getElementById('topTitle').textContent = (NAV.flatMap(g => g[1]).find(x => x[0] === route) || [])[1] || '';
+  if (route === 'checkin') updateScorePreview();
+  window.scrollTo(0, keep);
+  lastRoute = route;
+  closeMenu();
+}
+function save(msg) { Repo.commit(); if (msg) toast(msg); render(); }
+
+function toast(msg, kind = '') {
+  const box = document.getElementById('toasts'); const el = document.createElement('div');
+  el.className = 'toast ' + kind; el.textContent = msg; box.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+let modalOnClose = null;
+function openModal(html, wide = false) {
+  closeModal();
+  const bg = document.createElement('div'); bg.className = 'modal-bg'; bg.id = 'modal';
+  bg.innerHTML = `<div class="modal ${wide ? 'wide' : ''}" role="dialog" aria-modal="true">${html}</div>`;
+  bg.addEventListener('mousedown', e => { if (e.target === bg) closeModal(); });
+  document.body.appendChild(bg);
+  const f = bg.querySelector('button:not(.x), input, textarea'); if (f) f.focus({ preventScroll: true });
+}
+function closeModal() { const m = document.getElementById('modal'); if (m) m.remove(); }
+function confirmModal(title, body, actionLabel, onYes) {
+  openModal(`<div class="modal-head"><h2>${esc(title)}</h2><button class="x" data-action="close-modal">×</button></div><p class="muted">${esc(body)}</p><div class="row"><button class="btn primary" id="confirmYes">${esc(actionLabel)}</button><button class="btn" data-action="close-modal">Cancel</button></div>`);
+  document.getElementById('confirmYes').onclick = () => { closeModal(); onYes(); };
+}
+function segValues(root) { const o = {}; root.querySelectorAll('.seg[data-name]').forEach(s => o[s.dataset.name] = s.dataset.value || ''); return o; }
+function closeMenu() { document.getElementById('side').classList.remove('open'); const s = document.getElementById('scrim'); if (s) s.remove(); }
+
+const ACTIONS = {
+  'seg': el => { const seg = el.closest('.seg'); seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === el)); seg.dataset.value = el.dataset.val; if (seg.closest('#checkinForm')) updateScorePreview(); },
+  'close-modal': () => closeModal(),
+  'close-modal-nav': () => closeModal(),
+  'add-task': el => { const inp = document.getElementById('newTask'), v = inp.value.trim(); if (!v) return; (S().customTasks[el.dataset.date] = S().customTasks[el.dataset.date] || []).push(v); save('Task added'); },
+  'open-check': el => openModal(checkModal(el.dataset.tid)),
+  'save-check': () => {
+    const root = document.getElementById('checkForm'), tid = root.dataset.tid, v = segValues(root);
+    if (Object.values(v).some(x => !x)) { toast('Answer all four questions first.', 'warn'); return; }
+    const decision = decide(v);
+    (S().checks[tid] = S().checks[tid] || []).push({ date: today(), ...v, decision });
+    Repo.commit(); clearMetricCache();
+    const gate = completionGate(tid);
+    root.querySelector('#checkResult').innerHTML = `<div class="card flat mt"><div class="row between"><strong>Result</strong>${chip(decision, DECISION_TONE[decision])}</div><p class="small" style="margin:8px 0 0">${esc(DECISION_TEXT[decision])}</p>${gate.ok ? '<p class="small t-green" style="margin:6px 0 0">You can now mark this topic as mastered on the Skills page.</p>' : ''}</div>`;
+    root.querySelector('[data-action="save-check"]').outerHTML = `<button class="btn primary" data-action="close-modal">Done</button>`;
+    render();
+  },
+  'save-checkin': el => {
+    const d = el.dataset.date, log = readCheckinForm(d);
+    if (workHours(log) + num(log.university) + num(log.rest) === 0 && !log.learned && !log.built) { toast('Add hours or notes before saving.', 'warn'); return; }
+    S().logs[d] = log;
+    const sc = scoreLog(log), info = dayInfo(d);
+    save(info.type === 'exam' && workHours(log) === 0 ? 'Saved. University study logged.' : `Saved. Learning quality ${sc.total}/100.`);
+  },
+  'delete-log': el => confirmModal('Delete this check-in?', `The log for ${fmt(el.dataset.date, { year: true })} will be removed.`, 'Delete check-in', () => { delete S().logs[el.dataset.date]; save('Check-in deleted'); }),
+  'use-rest': el => { const d = el.dataset.date; if (isExam(d)) return; const cur = currentTopic(); const nx = dayInfo(d); S().overrides[d] = { type: 'learn', topicId: cur }; closeModal(); save(`${fmt(d)} is now a study day for ${tName(cur)}.`); },
+  'restore-rest': el => { delete S().overrides[el.dataset.date]; closeModal(); save(`${fmt(el.dataset.date)} is a rest day again.`); },
+  'toggle-essentials': el => { const ts = S().topicState[el.dataset.tid] = S().topicState[el.dataset.tid] || {}; ts.essentials = !ts.essentials; save(ts.essentials ? 'Essentials mode on' : 'Full topic restored'); },
+  'goto-skill': el => { UI.skillSel = el.dataset.tid; location.hash = 'skills'; },
+  'sel-skill': el => { UI.skillSel = el.dataset.tid; render(); const d = document.getElementById('skillDetail'); if (d && window.innerWidth < 960) d.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
+  'skill-filter': el => { UI.skillFilter = el.dataset.val; render(); },
+  'course-done': el => {
+    const tid = el.dataset.tid, ts = S().topicState[tid] = S().topicState[tid] || {};
+    ts.courseDone = !ts.courseDone;
+    if (ts.courseDone) scheduleRevisions(tid, today());
+    save(ts.courseDone ? 'Course marked completed. That is course completion, not mastery. Revision checkpoints created.' : 'Course completion reset');
+  },
+  'complete-topic': el => {
+    const tid = el.dataset.tid, ts = S().topicState[tid] = S().topicState[tid] || {};
+    if (ts.completedOn) { delete ts.completedOn; save('Topic reopened'); return; }
+    const g = completionGate(tid); if (!g.ok) { toast(g.why.join(' '), 'warn'); return; }
+    ts.completedOn = today(); ts.courseDone = true; scheduleRevisions(tid, today());
+    save(`${tName(tid)} marked mastered. Revision checkpoints scheduled.`);
+  },
+  'open-revision': el => openModal(revisionModal(el.dataset.id)),
+  'save-revision': () => {
+    const root = document.getElementById('revForm'), r = S().revisions.find(x => x.id === root.dataset.id), v = segValues(root);
+    if (Object.values(v).some(x => !x)) { toast('Rate all four items first.', 'warn'); return; }
+    const val = { yes: 1, partly: 0.5, no: 0 };
+    r.result = { ...v, notes: root.querySelector('[name=notes]').value }; r.score = Math.round(avg(Object.values(v).map(x => val[x])) * 100);
+    r.done = true; r.doneOn = today();
+    if (r.score < 50) { let due = addDays(today(), 2); while (isExam(due)) due = addDays(due, 1); S().revisions.push({ id: `${r.topicId}-retry-${Date.now()}`, topicId: r.topicId, interval: 'retry', due, done: false }); }
+    closeModal(); save(r.score < 50 ? `Retention ${r.score}%. A re-check is scheduled in 2 days.` : `Retention ${r.score}%. Saved.`);
+  },
+  'rev-tab': el => { UI.revTab = el.dataset.val; render(); },
+  'open-day': el => openModal(dayModal(el.dataset.date)),
+  'cal-prev': () => { const [y, m] = UI.calMonth.split('-').map(Number); UI.calMonth = toISO(new Date(y, m - 2, 1)).slice(0, 7); render(); },
+  'cal-next': () => { const [y, m] = UI.calMonth.split('-').map(Number); UI.calMonth = toISO(new Date(y, m, 1)).slice(0, 7); render(); },
+  'cal-today': () => { UI.calMonth = today().slice(0, 7); render(); },
+  'week-prev': () => { UI.week = addDays(UI.week, -7); render(); },
+  'week-next': () => { UI.week = addDays(UI.week, 7); render(); },
+  'week-now': () => { UI.week = weekStart(today()); render(); },
+  'save-week': () => { const root = document.getElementById('weekForm'), o = {}; root.querySelectorAll('textarea').forEach(t => o[t.name] = t.value); S().weekly[root.dataset.ws] = o; save('Weekly review saved'); },
+  'month-prev': () => { const [y, m] = UI.month.split('-').map(Number); UI.month = toISO(new Date(y, m - 2, 1)).slice(0, 7); render(); },
+  'month-next': () => { const [y, m] = UI.month.split('-').map(Number); UI.month = toISO(new Date(y, m, 1)).slice(0, 7); render(); },
+  'save-month': () => { S().monthly[UI.month] = document.getElementById('monthNotes').value; save('Monthly notes saved'); },
+  'new-project': () => openModal(projectForm(null), true),
+  'edit-project': el => openModal(projectForm(S().projects.find(p => p.id === el.dataset.id)), true),
+  'save-project': () => {
+    const root = document.getElementById('projForm'), id = root.dataset.id, g = n => root.querySelector(`[name=${n}]`).value.trim();
+    if (!g('name')) { toast('Give the project a name.', 'warn'); return; }
+    const stack = [...root.querySelectorAll('[name=stack]:checked')].map(x => x.value);
+    const names = g('milestones').split('\n').map(x => x.trim()).filter(Boolean);
+    let p = S().projects.find(x => x.id === id);
+    const prevDone = p ? Object.fromEntries(p.milestones.map(m => [m.name, m.done])) : {};
+    const data = { name: g('name'), goal: g('goal'), target: g('target'), stack, extra: g('extra').split(',').map(x => x.trim()).filter(Boolean), milestones: names.map(n => ({ name: n, done: !!prevDone[n] })) };
+    if (p) Object.assign(p, data); else S().projects.push({ id: 'p' + Date.now(), repo: '', demo: '', readme: false, deployed: false, ...data });
+    closeModal(); save(p ? 'Project saved' : 'Project added');
+  },
+  'delete-project': el => { const p = S().projects.find(x => x.id === el.dataset.id); confirmModal('Delete project?', `“${p.name}” and its milestones will be removed.`, 'Delete project', () => { S().projects = S().projects.filter(x => x !== p); save('Project deleted'); }); },
+  'set-theme': el => { S().settings.theme = el.dataset.val; save(); },
+  'clear-override': () => { S().settings.dateOverride = ''; UI.checkinDate = null; UI.week = null; save('Using the real date'); },
+  'export': async () => {
+    const json = JSON.stringify(S(), null, 2), filename = `learning-roadmap-${today()}.json`;
+    try {
+      const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+      if (dl) { await dl.save({ filename, data: new Blob([json], { type: 'application/json' }) }); toast('Export saved'); return; }
+    } catch (e) { if (e && e.code === 'declined') return; }
+    if (!window.claude) { // standalone hosting (e.g. Vercel): normal browser download
+      const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+      const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000); toast('Export downloaded'); return;
+    }
+    openModal(`<div class="modal-head"><h2>Export data</h2><button class="x" data-action="close-modal">×</button></div><p class="small muted">Copy this JSON and keep it somewhere safe. You can paste it into a .json file and import it later.</p><textarea class="in" style="min-height:260px;font-size:12px" readonly>${esc(json)}</textarea><div class="row mt"><button class="btn primary" id="copyJson">Copy to clipboard</button></div>`, true);
+    document.getElementById('copyJson').onclick = async () => { try { await navigator.clipboard.writeText(json); toast('Copied'); } catch (e) { document.querySelector('#modal textarea').select(); toast('Select all and copy manually.', 'warn'); } };
+  },
+  'reset': () => confirmModal('Reset all data?', 'Every check-in, check, revision, project change and review will be erased from this browser. Export first if you want a backup.', 'Reset all data', () => { Repo.reset(); UI.checkinDate = null; render(); toast('All data reset'); }),
+  'menu': () => { const side = document.getElementById('side'); side.classList.add('open'); const s = document.createElement('div'); s.className = 'scrim'; s.id = 'scrim'; s.onclick = closeMenu; document.body.appendChild(s); },
+};
+const CHANGES = {
+  'toggle-task': el => { const d = el.dataset.date, task = el.dataset.task; const o = S().taskChecks[d] = S().taskChecks[d] || {}; if (el.checked) o[task] = true; else delete o[task]; save(); },
+  'checkin-date': el => { if (el.value) location.hash = 'checkin/' + el.value; },
+  'proj-field': el => { const p = S().projects.find(x => x.id === el.dataset.id); p[el.dataset.field] = el.value.trim(); save(); },
+  'proj-bool': el => { const p = S().projects.find(x => x.id === el.dataset.id); p[el.dataset.field] = el.checked; save(); },
+  'ms-toggle': el => { const p = S().projects.find(x => x.id === el.dataset.id); p.milestones[+el.dataset.i].done = el.checked; save(); },
+  'chip-toggle': el => { const lab = el.closest('label'); lab.className = `chip ${el.checked ? 'bg-' + el.dataset.tone : 'bg-muted'}`; },
+  'set-target': el => { S().settings.codingTarget = clamp(num(el.value) || 2, 0.5, 8); save('Coding target updated'); },
+  'set-override': el => { S().settings.dateOverride = el.value; UI.checkinDate = null; UI.week = null; UI.calMonth = null; UI.month = null; save(el.value ? `Previewing ${fmt(el.value, { year: true })}` : ''); },
+  'import': el => {
+    const f = el.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const data = JSON.parse(rd.result);
+        if (!data || typeof data !== 'object' || !data.logs || !data.settings) throw new Error('shape');
+        Repo.state = Object.assign(defaultState(), data); save('Data imported');
+      } catch (e) { toast('That file is not a valid export from this tracker.', 'warn'); }
+    };
+    rd.readAsText(f);
+  },
+};
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]'); if (!el) return;
+  const fn = ACTIONS[el.dataset.action]; if (!fn) return;
+  if (el.tagName === 'A' && el.dataset.action === 'close-modal-nav') { closeModal(); return; }
+  if (el.tagName !== 'A') e.preventDefault();
+  fn(el, e);
+});
+document.addEventListener('change', e => { const el = e.target.closest('[data-change]'); if (el && CHANGES[el.dataset.change]) CHANGES[el.dataset.change](el, e); });
+document.addEventListener('input', e => {
+  if (e.target.type === 'range') { const o = e.target.parentElement.querySelector('output'); if (o) o.textContent = e.target.value; }
+  if (e.target.closest('#checkinForm')) updateScorePreview();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeMenu(); }
+  if (e.key === 'Enter' && e.target.id === 'newTask') { const b = document.querySelector('[data-action="add-task"]'); if (b) b.click(); }
+});
+window.addEventListener('hashchange', render);
+
+Repo.init();
+render();
+</script></body></html>
